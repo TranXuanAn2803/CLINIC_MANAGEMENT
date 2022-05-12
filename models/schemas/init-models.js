@@ -1,26 +1,26 @@
-var DataTypes = require("sequelize").DataTypes;
-var _bill = require("./bill");
-var _checkup = require("./checkup");
-var _checkup_disease = require("./checkup-disease");
-var _checkup_medicine = require("./checkup-medicine");
-var _constraint = require("./constraint");
-var _disease = require("./disease");
-var _medicine = require("./medicine");
-var _patient = require("./patient");
-var _unit = require("./unit");
-var _usermanual = require("./usermanual");
+const DataTypes = require("sequelize").DataTypes;
+const _bill = require("./bill");
+const _checkup = require("./checkup");
+const _checkup_disease = require("./checkup-disease");
+const _checkup_medicine = require("./checkup-medicine");
+const _constraint = require("./constraint");
+const _disease = require("./disease");
+const _medicine = require("./medicine");
+const _patient = require("./patient");
+const _unit = require("./unit");
+const _usermanual = require("./usermanual");
 
 function initModels(sequelize) {
-    var bill = _bill(sequelize, DataTypes);
-    var checkup = _checkup(sequelize, DataTypes);
-    var checkup_disease = _checkup_disease(sequelize, DataTypes);
-    var checkup_medicine = _checkup_medicine(sequelize, DataTypes);
-    var constraint = _constraint(sequelize, DataTypes);
-    var disease = _disease(sequelize, DataTypes);
-    var medicine = _medicine(sequelize, DataTypes);
-    var patient = _patient(sequelize, DataTypes);
-    var unit = _unit(sequelize, DataTypes);
-    var usermanual = _usermanual(sequelize, DataTypes);
+    const bill = _bill(sequelize, DataTypes);
+    const checkup = _checkup(sequelize, DataTypes);
+    const checkup_disease = _checkup_disease(sequelize, DataTypes);
+    const checkup_medicine = _checkup_medicine(sequelize, DataTypes);
+    const constraint = _constraint(sequelize, DataTypes);
+    const disease = _disease(sequelize, DataTypes);
+    const medicine = _medicine(sequelize, DataTypes);
+    const patient = _patient(sequelize, DataTypes);
+    const unit = _unit(sequelize, DataTypes);
+    const usermanual = _usermanual(sequelize, DataTypes);
 
     checkup.belongsToMany(disease, { as: 'iddisease_diseases', through: checkup - disease, foreignKey: "idcheckup", otherKey: "iddisease" });
     checkup.belongsToMany(medicine, { as: 'medicine_medicines', through: checkup - medicine, foreignKey: "checkup", otherKey: "medicine" });

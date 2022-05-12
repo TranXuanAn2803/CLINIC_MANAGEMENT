@@ -1,5 +1,4 @@
-const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('checkup-disease', {
     idcheckup: {
       type: DataTypes.BIGINT,
@@ -26,13 +25,13 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "checkup-disease_pkey",
+        name: 'checkup-disease_pkey',
         unique: true,
         fields: [
-          { name: "idcheckup" },
-          { name: "iddisease" },
+          { name: 'idcheckup' },
+          { name: 'iddisease' }
         ]
-      },
+      }
     ]
   });
 };

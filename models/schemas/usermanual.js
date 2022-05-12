@@ -1,6 +1,5 @@
-const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('unit', {
+module.exports = function (sequelize, DataTypes) {
+  return sequelize.define('usermanual', {
     id: {
       autoIncrement: true,
       autoIncrementIdentity: true,
@@ -8,23 +7,23 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     },
-    type: {
+    description: {
       type: DataTypes.TEXT,
       allowNull: false
     }
   }, {
     sequelize,
-    tableName: 'unit',
+    tableName: 'usermanual',
     schema: 'public',
     timestamps: false,
     indexes: [
       {
-        name: "unit_pkey",
+        name: 'usermanual_pkey',
         unique: true,
         fields: [
-          { name: "id" },
+          { name: 'id' }
         ]
-      },
+      }
     ]
   });
 };
