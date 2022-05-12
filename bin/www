@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
+require('dotenv').config();
 const app = require('../app');
 const debug = require('debug')('web:server');
 const http = require('http');
+const DBConnect = require('../config/DBconnect');
 
 const normalizePort = val => {
   const port = parseInt(val, 10);
@@ -60,3 +62,4 @@ const server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+DBConnect.DBconnect();
