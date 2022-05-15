@@ -6,6 +6,8 @@ const logger = require('morgan');
 const exphbs = require('express-handlebars');
 
 const indexRouter = require('./routes/index');
+const apiRouter = require('./routes/api');
+const patientRouter = require('./routes/patient');
 
 const app = express();
 
@@ -18,6 +20,9 @@ const hbs = exphbs.create({
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 
+app.use(express.static(path.join(__dirname, 'node_modules/tabulator-tables/dist/css')));
+app.use(express.static(path.join(__dirname, 'node_modules/tabulator-tables/dist/js')));
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -25,6 +30,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/api', apiRouter);
+app.use('/patient', patientRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
