@@ -1,164 +1,160 @@
 <div class="m-2">
-    <div class="m-2">
-        <button class="button" id="ajax-trigger-button">Tải dữ liệu</button>
-        <button class="button" id="select-all-button">Chọn tất cả</button>
-        <button class="button" id="deselect-all-button">Bỏ chọn tất cả</button>
-        <button class="button is-primary" id="modify-button" disabled>Cập nhật</button>
-        <button class="button is-danger" id="delete-button">Xóa</button>
-        <input class="input is-primary" id="filter-input" type="text" placeholder="Nhập tên cần lọc" style="width: 500px;">
-    </div>
-    <div id="table"></div>
-
-    <form id="modify-form-modal" class="modal">
-        <div class="modal-background"></div>
-
-        <div class="modal-content box">
-            <div class="field">
-                <label class="label">Tên</label>
-                <div class="control">
-                    <input id="modify-form-modal-name" name="name" class="input" type="text" required>
-                </div>
-            </div>
-
-            <div class="field">
-                <label class="label">Giới tính</label>
-                <div class="control">
-                    <div class="select">
-                        <select id="modify-form-modal-gender" name="gender" required>
-                            <option>Nam</option>
-                            <option>Nữ</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="field">
-                <label class="label">Năm sinh</label>
-                <div class="control">
-                    <input id="modify-form-modal-year-of-birth" , name="yearOfBirth" class="input" type="number"
-                        required>
-                </div>
-            </div>
-
-            <div class="field">
-                <label class="label">Địa chỉ</label>
-                <div class="control">
-                    <input id="modify-form-modal-address" name="address" class="input" type="text">
-                </div>
-            </div>
-
-            <div class="field is-grouped">
-                <div class="control">
-                    <button id="modify-form-modal-update" class="button is-link" type="button">Cập nhập</button>
-                </div>
-                <div class="control">
-                    <button id="modify-form-modal-close" class="button is-link is-light" type="button">Hủy bỏ</button>
-                </div>
-            </div>
-        </div>
-    </form>
-
-    <form id="delete-form-modal" class="modal">
-        <div class="modal-background"></div>
-
-        <div class="modal-content box">
-            <p class="is-size-4 has-text-centered has-text-weight-bold pb-3">Bạn có chắc muốn xóa?</p>
-            <div class="field is-grouped columns is-justify-content-center py-4">
-                <div class="control">
-                    <button id="delete-form-modal-confirm" class="button column is-link is-inline-flex"
-                        type="button">Xác nhận</button>
-                </div>
-                <div class="control">
-                    <button id="delete-form-modal-close" class="button column is-link is-light is-inline-flex"
-                        type="button">Hủy bỏ</button>
-                </div>
-            </div>
-        </div>
-    </form>
+  <button class="button" id="ajax-trigger-button">Tải dữ liệu</button>
+  <button class="button" id="select-all-button">Chọn tất cả</button>
+  <button class="button" id="deselect-all-button">Bỏ chọn tất cả</button>
+  <button class="button is-primary" id="modify-button" disabled>Cập nhật</button>
+  <button class="button is-danger" id="delete-button">Xóa</button>
+  <input class="input is-primary" id="filter-input" type="text" placeholder="Nhập tên cần lọc" style="width: 500px;">
 </div>
+<div id="table"></div>
+
+<form id="modify-form-modal" class="modal">
+  <div class="modal-background"></div>
+
+  <div class="modal-content box">
+    <div class="field">
+      <label class="label">Tên</label>
+      <div class="control">
+        <input id="modify-form-modal-name" name="name" class="input" type="text" required>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Giới tính</label>
+      <div class="control">
+        <div class="select">
+          <select id="modify-form-modal-gender" name="gender" required>
+            <option>Nam</option>
+            <option>Nữ</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Năm sinh</label>
+      <div class="control">
+        <input id="modify-form-modal-year-of-birth" , name="yearOfBirth" class="input" type="number" required>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Địa chỉ</label>
+      <div class="control">
+        <input id="modify-form-modal-address" name="address" class="input" type="text">
+      </div>
+    </div>
+
+    <div class="field is-grouped">
+      <div class="control">
+        <button id="modify-form-modal-update" class="button is-link" type="button">Cập nhập</button>
+      </div>
+      <div class="control">
+        <button id="modify-form-modal-close" class="button is-link is-light" type="button">Hủy bỏ</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<form id="delete-form-modal" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-content box">
+    <p class="is-size-4 has-text-centered has-text-weight-bold pb-3">Bạn có chắc muốn xóa?</p>
+    <div class="field is-grouped columns is-justify-content-center py-4">
+      <div class="control">
+        <button id="delete-form-modal-confirm" class="button column is-link is-inline-flex" type="button">Xác
+          nhận</button>
+      </div>
+      <div class="control">
+        <button id="delete-form-modal-close" class="button column is-link is-light is-inline-flex" type="button">Hủy
+          bỏ</button>
+      </div>
+    </div>
+  </div>
+</form>
+
 
 <script>
-    var table = new Tabulator("#table", {
-        layout: "fitColumns",
-        selectable: true,
-        selectableRangeMode: "click",
-        placeholder: "Không có dữ liệu",
-        columns: [
-            { title: "id", field: "id", visible: false },
-            { title: "STT", field: "STT", formatter: "rownum", width: 100 },
-            { title: "Tên", field: "name", sorter: "string" },
-            { title: "Giới tính", field: "gender", sorter: "string" },
-            { title: "Năm sinh", field: "yearOfBirth", sorter: "number", width: 150 },
-            { title: "Địa chỉ", field: "address", sorter: "string" },
-        ],
-    });
+  var table = new Tabulator("#table", {
+    layout: "fitColumns",
+    selectable: true,
+    selectableRangeMode: "click",
+    placeholder: "Không có dữ liệu",
+    columns: [
+      { title: "id", field: "id", visible: false },
+      { title: "STT", field: "STT", formatter: "rownum", width: 100 },
+      { title: "Tên", field: "name", sorter: "string" },
+      { title: "Giới tính", field: "gender", sorter: "string" },
+      { title: "Năm sinh", field: "yearOfBirth", sorter: "number", width: 150 },
+      { title: "Địa chỉ", field: "address", sorter: "string" },
+    ],
+  });
 
-    var loadDataButton = document.getElementById("ajax-trigger-button");
-    var selectAllButton = document.getElementById("select-all-button");
-    var deselectAllButton = document.getElementById("deselect-all-button");
-    var modifyButton = document.getElementById("modify-button");
-    var deleteButton = document.getElementById("delete-button");
-    var filterInput = document.getElementById("filter-input");
+  var loadDataButton = document.getElementById("ajax-trigger-button");
+  var selectAllButton = document.getElementById("select-all-button");
+  var deselectAllButton = document.getElementById("deselect-all-button");
+  var modifyButton = document.getElementById("modify-button");
+  var deleteButton = document.getElementById("delete-button");
+  var filterInput = document.getElementById("filter-input");
 
-    var modifyFormModal = document.getElementById("modify-form-modal");
-    var confirmModifyModalButton = document.getElementById("modify-form-modal-update");
-    var closeModifyModalButton = document.getElementById("modify-form-modal-close");
-    var nameModifyModalInput = document.getElementById("modify-form-modal-name");
-    var genderModifyModalInput = document.getElementById("modify-form-modal-gender");
-    var yearOfBirthModifyModalInput = document.getElementById("modify-form-modal-year-of-birth");
-    var addressModifyModalInput = document.getElementById("modify-form-modal-address");
+  var modifyFormModal = document.getElementById("modify-form-modal");
+  var confirmModifyModalButton = document.getElementById("modify-form-modal-update");
+  var closeModifyModalButton = document.getElementById("modify-form-modal-close");
+  var nameModifyModalInput = document.getElementById("modify-form-modal-name");
+  var genderModifyModalInput = document.getElementById("modify-form-modal-gender");
+  var yearOfBirthModifyModalInput = document.getElementById("modify-form-modal-year-of-birth");
+  var addressModifyModalInput = document.getElementById("modify-form-modal-address");
 
-    var deleteFormModal = document.getElementById("delete-form-modal");
-    var confirmDeleteModalButton = document.getElementById("delete-form-modal-confirm");
-    var closeDeleteModalButton = document.getElementById("delete-form-modal-close");
+  var deleteFormModal = document.getElementById("delete-form-modal");
+  var confirmDeleteModalButton = document.getElementById("delete-form-modal-confirm");
+  var closeDeleteModalButton = document.getElementById("delete-form-modal-close");
 
-    table.on("rowSelectionChanged", function (data, rows) {
-        modifyButton.disabled = data.length !== 1;
-        deleteButton.disabled = data.length === 0;
-    });
+  table.on("rowSelectionChanged", function (data, rows) {
+    modifyButton.disabled = data.length !== 1;
+    deleteButton.disabled = data.length === 0;
+  });
 
-    modifyButton.onclick = function () {
-        var row = table.getSelectedData()[0];
-        nameModifyModalInput.value = row.name;
-        yearOfBirthModifyModalInput.value = row.yearOfBirth;
-        addressModifyModalInput.value = row.address;
-        modifyFormModal.classList.add("is-active");
-    };
+  modifyButton.onclick = function () {
+    var row = table.getSelectedData()[0];
+    nameModifyModalInput.value = row.name;
+    yearOfBirthModifyModalInput.value = row.yearOfBirth;
+    addressModifyModalInput.value = row.address;
+    modifyFormModal.classList.add("is-active");
+  };
 
-    deleteButton.onclick = function () {
-        deleteFormModal.classList.add("is-active");
-    };
+  deleteButton.onclick = function () {
+    deleteFormModal.classList.add("is-active");
+  };
 
-    filterInput.onchange = function (e) {
-        table.setFilter("name", "like", e.target.value);
-    };
+  filterInput.onchange = function (e) {
+    table.setFilter("name", "like", e.target.value);
+  };
 
-    closeModifyModalButton.onclick = function () { modifyFormModal.classList.remove("is-active"); };
+  closeModifyModalButton.onclick = function () { modifyFormModal.classList.remove("is-active"); };
 
-    confirmModifyModalButton.onclick = function (e) {
-        e.preventDefault();
+  confirmModifyModalButton.onclick = function (e) {
+    e.preventDefault();
 
-        var name = nameModifyModalInput.value;
-        var gender = genderModifyModalInput.value;
-        var yearOfBirth = yearOfBirthModifyModalInput.value;
-        var address = addressModifyModalInput.value;
+    var name = nameModifyModalInput.value;
+    var gender = genderModifyModalInput.value;
+    var yearOfBirth = yearOfBirthModifyModalInput.value;
+    var address = addressModifyModalInput.value;
 
-        table.updateData([{ id: table.getSelectedData()[0].id, name, gender, yearOfBirth, address }]);
-        modifyFormModal.classList.remove("is-active");
-        table.deselectRow();
-    }
+    table.updateData([{ id: table.getSelectedData()[0].id, name, gender, yearOfBirth, address }]);
+    modifyFormModal.classList.remove("is-active");
+    table.deselectRow();
+  }
 
-    closeDeleteModalButton.onclick = function () { deleteFormModal.classList.remove("is-active") }
+  closeDeleteModalButton.onclick = function () { deleteFormModal.classList.remove("is-active") }
 
-    confirmDeleteModalButton.onclick = function () {
-        var arr = table.getSelectedData().map(function (r) { return r.id; });
-        table.deleteRow(arr);
-        deleteFormModal.classList.remove("is-active");
-        table.deselectRow();
-    }
+  confirmDeleteModalButton.onclick = function () {
+    var arr = table.getSelectedData().map(function (r) { return r.id; });
+    table.deleteRow(arr);
+    deleteFormModal.classList.remove("is-active");
+    table.deselectRow();
+  }
 
-    loadDataButton.onclick = function () { table.setData("/api/data"); };
-    selectAllButton.onclick = function () { table.selectRow(); };
-    deselectAllButton.onclick = function () { table.deselectRow(); }
-
+  loadDataButton.onclick = function () { table.setData("/api/data"); };
+  selectAllButton.onclick = function () { table.selectRow(); };
+  deselectAllButton.onclick = function () { table.deselectRow(); }
 </script>
