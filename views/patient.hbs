@@ -1,21 +1,22 @@
 <div class="m-2">
-  <button class="button" id="ajax-trigger-button">Tải dữ liệu</button>
+  <button class="button" id="load-data-button">Tải dữ liệu</button>
   <button class="button" id="select-all-button">Chọn tất cả</button>
   <button class="button" id="deselect-all-button">Bỏ chọn tất cả</button>
-  <button class="button is-primary" id="modify-button" disabled>Cập nhật</button>
+  <button class="button is-primary" id="create-button">Thêm</button>
+  <button class="button is-info" id="modify-button" disabled>Cập nhật</button>
   <button class="button is-danger" id="delete-button">Xóa</button>
   <input class="input is-primary" id="filter-input" type="text" placeholder="Nhập tên cần lọc" style="width: 500px;">
 </div>
 <div id="table"></div>
 
-<form id="modify-form-modal" class="modal">
+<form id="modify-modal" class="modal">
   <div class="modal-background"></div>
 
   <div class="modal-content box">
     <div class="field">
       <label class="label">Tên</label>
       <div class="control">
-        <input id="modify-form-modal-name" name="name" class="input" type="text" required>
+        <input id="modify-modal-name" name="name" class="input" type="text" required>
       </div>
     </div>
 
@@ -23,50 +24,50 @@
       <label class="label">Giới tính</label>
       <div class="control">
         <div class="select">
-          <select id="modify-form-modal-gender" name="gender" required>
+          <select id="modify-modal-gender" name="gender" required>
             <option>Nam</option>
             <option>Nữ</option>
           </select>
         </div>
-      </div>
+      </div>modal
     </div>
 
     <div class="field">
       <label class="label">Năm sinh</label>
       <div class="control">
-        <input id="modify-form-modal-year-of-birth" , name="yearOfBirth" class="input" type="number" required>
+        <input id="modify-modal-year-of-birth" , name="yearOfBirth" class="input" type="number" required>
       </div>
     </div>
 
     <div class="field">
       <label class="label">Địa chỉ</label>
       <div class="control">
-        <input id="modify-form-modal-address" name="address" class="input" type="text">
+        <input id="modify-modal-address" name="address" class="input" type="text">
       </div>
     </div>
 
     <div class="field is-grouped">
       <div class="control">
-        <button id="modify-form-modal-update" class="button is-link" type="button">Cập nhập</button>
+        <button id="modify-modal-confirm" class="button is-link" type="button">Cập nhập</button>
       </div>
       <div class="control">
-        <button id="modify-form-modal-close" class="button is-link is-light" type="button">Hủy bỏ</button>
+        <button id="modify-modal-close" class="button is-link is-light" type="button">Hủy bỏ</button>
       </div>
     </div>
   </div>
 </form>
 
-<form id="delete-form-modal" class="modal">
+<form id="delete-modal" class="modal">
   <div class="modal-background"></div>
   <div class="modal-content box">
     <p class="is-size-4 has-text-centered has-text-weight-bold pb-3">Bạn có chắc muốn xóa?</p>
     <div class="field is-grouped columns is-justify-content-center py-4">
       <div class="control">
-        <button id="delete-form-modal-confirm" class="button column is-link is-inline-flex" type="button">Xác
+        <button id="delete-modal-confirm" class="button column is-link is-inline-flex" type="button">Xác
           nhận</button>
       </div>
       <div class="control">
-        <button id="delete-form-modal-close" class="button column is-link is-light is-inline-flex" type="button">Hủy
+        <button id="delete-modal-close" class="button column is-link is-light is-inline-flex" type="button">Hủy
           bỏ</button>
       </div>
     </div>
@@ -78,6 +79,7 @@
   var table = new Tabulator("#table", {
     layout: "fitColumns",
     selectable: true,
+    height: "88vh",
     selectableRangeMode: "click",
     placeholder: "Không có dữ liệu",
     columns: [
@@ -90,71 +92,83 @@
     ],
   });
 
-  var loadDataButton = document.getElementById("ajax-trigger-button");
-  var selectAllButton = document.getElementById("select-all-button");
-  var deselectAllButton = document.getElementById("deselect-all-button");
-  var modifyButton = document.getElementById("modify-button");
-  var deleteButton = document.getElementById("delete-button");
-  var filterInput = document.getElementById("filter-input");
+  $("#load-data-button").onclick = function () { table.setData("/api/data"); };
+  $("#select-all-button").onclick = function () { table.selectRow(); };
+  $("#deselect-all-button").onclick = function () { table.deselectRow(); }
 
-  var modifyFormModal = document.getElementById("modify-form-modal");
-  var confirmModifyModalButton = document.getElementById("modify-form-modal-update");
-  var closeModifyModalButton = document.getElementById("modify-form-modal-close");
-  var nameModifyModalInput = document.getElementById("modify-form-modal-name");
-  var genderModifyModalInput = document.getElementById("modify-form-modal-gender");
-  var yearOfBirthModifyModalInput = document.getElementById("modify-form-modal-year-of-birth");
-  var addressModifyModalInput = document.getElementById("modify-form-modal-address");
+  var modifyButton = $("#modify-button");
+  var deleteButton = $("#delete-button");
+  var isCreate = false;
 
-  var deleteFormModal = document.getElementById("delete-form-modal");
-  var confirmDeleteModalButton = document.getElementById("delete-form-modal-confirm");
-  var closeDeleteModalButton = document.getElementById("delete-form-modal-close");
+  var formModal = $("#modify-modal");
+  var nameModifyModalInput = $("#modify-modal-name");
+  var genderModifyModalInput = $("#modify-modal-gender");
+  var yearOfBirthModifyModalInput = $("#modify-modal-year-of-birth");
+  var addressModifyModalInput = $("#modify-modal-address");
+
+  var deleteFormModal = $("#delete-modal");
 
   table.on("rowSelectionChanged", function (data, rows) {
     modifyButton.disabled = data.length !== 1;
     deleteButton.disabled = data.length === 0;
   });
 
+  $("#create-button").onclick = function () {
+    isCreate = true;
+    formModal.classList.add("is-active");
+  };
+
   modifyButton.onclick = function () {
+    isCreate = false;
     var row = table.getSelectedData()[0];
     nameModifyModalInput.value = row.name;
     yearOfBirthModifyModalInput.value = row.yearOfBirth;
     addressModifyModalInput.value = row.address;
-    modifyFormModal.classList.add("is-active");
+    formModal.classList.add("is-active");
   };
 
-  deleteButton.onclick = function () {
-    deleteFormModal.classList.add("is-active");
-  };
+  deleteButton.onclick = function () { deleteFormModal.classList.add("is-active"); };
 
-  filterInput.onchange = function (e) {
+  $("#filter-input").onchange = function (e) {
     table.setFilter("name", "like", e.target.value);
   };
 
-  closeModifyModalButton.onclick = function () { modifyFormModal.classList.remove("is-active"); };
-
-  confirmModifyModalButton.onclick = function (e) {
+  $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active"); };
+  $("#modify-modal-confirm").onclick = function (e) {
     e.preventDefault();
-
+    
     var name = nameModifyModalInput.value;
     var gender = genderModifyModalInput.value;
     var yearOfBirth = yearOfBirthModifyModalInput.value;
     var address = addressModifyModalInput.value;
+    var hasError = false;
 
-    table.updateData([{ id: table.getSelectedData()[0].id, name, gender, yearOfBirth, address }]);
-    modifyFormModal.classList.remove("is-active");
+    if (name.length === 0) {
+      nameModifyModalInput.classList.add("is-danger");
+      hasError = true;
+    }
+    if (address.length === 0) {
+      addressModifyModalInput.classList.add("is-danger");
+      hasError = true;
+    }
+    if (hasError) {
+      return;
+    }
+
+    if (isCreate) {
+      table.addData([ {id: Math.round(Math.random() * 10000), name, gender, yearOfBirth, address} ], true);
+    } else {
+      table.updateData([{ id: table.getSelectedData()[0].id, name, gender, yearOfBirth, address }]);
+    }
+
+    formModal.classList.remove("is-active");
     table.deselectRow();
   }
 
-  closeDeleteModalButton.onclick = function () { deleteFormModal.classList.remove("is-active") }
-
-  confirmDeleteModalButton.onclick = function () {
-    var arr = table.getSelectedData().map(function (r) { return r.id; });
-    table.deleteRow(arr);
+  $("#delete-modal-close").onclick = function () { deleteFormModal.classList.remove("is-active") }
+  $("#delete-modal-confirm").onclick = function () {
+    table.deleteRow(table.getSelectedData().map(function (r) { return r.id; }));
     deleteFormModal.classList.remove("is-active");
     table.deselectRow();
   }
-
-  loadDataButton.onclick = function () { table.setData("/api/data"); };
-  selectAllButton.onclick = function () { table.selectRow(); };
-  deselectAllButton.onclick = function () { table.deselectRow(); }
 </script>

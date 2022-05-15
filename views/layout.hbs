@@ -10,6 +10,12 @@
   <link rel="stylesheet" href="tabulator_bulma.min.css">
   <script type="text/javascript" src="tabulator.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+  <script>
+    function $(selector) {
+      return document.querySelector(selector);
+    };
+  </script>
 </head>
 
 <body>
@@ -24,8 +30,8 @@
     <div class="navbar-menu">
       <div class="navbar-start">
         <a class="navbar-item">Phiếu Khám</a>
-        <a class="navbar-item">Báo cáo</a>
         <a class="navbar-item" href="/patient">Bệnh Nhân</a>
+        <a class="navbar-item">Báo cáo</a>
         <a class="navbar-item">Quy Định</a>
       </div>
 
@@ -39,7 +45,9 @@
     </div>
   </nav>
 
-  {{{body}}}
+  <div class="mx-2">
+    {{{body}}}
+  </div>
 </body>
 
 </html>
