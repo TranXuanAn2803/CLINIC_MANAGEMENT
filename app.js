@@ -8,6 +8,7 @@ const exphbs = require('express-handlebars');
 const indexRouter = require('./routes/index');
 const apiRouter = require('./routes/api');
 const patientRouter = require('./routes/patient');
+const diseaseRouter = require('./routes/disease');
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
 app.use('/patient', patientRouter);
+app.use('/disease', diseaseRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

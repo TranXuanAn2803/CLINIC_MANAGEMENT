@@ -85,14 +85,11 @@
     columns: [
       { title: "id", field: "id", visible: false },
       { title: "STT", field: "STT", formatter: "rownum", width: 100 },
-      { title: "Tên", field: "name", sorter: "string" },
-      { title: "Giới tính", field: "gender", sorter: "string" },
-      { title: "Năm sinh", field: "yearOfBirth", sorter: "number", width: 150 },
-      { title: "Địa chỉ", field: "address", sorter: "string" },
+      { title: "Triệu chứng", field: "description", sorter: "string" },
     ],
   });
 
-  $("#load-data-button").onclick = function () { table.setData("/api/fake/patient"); };
+  $("#load-data-button").onclick = function () { table.setData("/api/fake/disease"); };
   $("#select-all-button").onclick = function () { table.selectRow(); };
   $("#deselect-all-button").onclick = function () { table.deselectRow(); }
 
