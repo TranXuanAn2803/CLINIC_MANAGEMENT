@@ -10,6 +10,7 @@ const apiRouter = require('./routes/api');
 const patientRouter = require('./routes/patient');
 const diseaseRouter = require('./routes/disease');
 const medicineRouter = require('./routes/medicine');
+const constraintRouter = require('./routes/constraint');
 
 const app = express();
 
@@ -36,6 +37,7 @@ app.use('/api', apiRouter);
 app.use('/patient', patientRouter);
 app.use('/disease', diseaseRouter);
 app.use('/medicine', medicineRouter);
+app.use('/constraint', constraintRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
