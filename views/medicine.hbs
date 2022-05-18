@@ -14,9 +14,42 @@
 
   <div class="modal-content box">
     <div class="field">
-      <label class="label">Triệu chứng</label>
+      <label class="label">Tên</label>
       <div class="control">
-        <input id="modify-modal-name" name="description" class="input" type="text" required>
+        <input id="modify-modal-name" name="name" class="input" type="text" required>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Đơn vị</label>
+      <div class="control">
+        <div class="select">
+          <select id="modify-modal-unit" name="unit" required>
+            {{#each units}}
+            <option>{{this}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Giá</label>
+      <div class="control">
+        <input id="modify-modal-price" , name="price" class="input" type="number" required>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Cách dùng</label>
+      <div class="control">
+        <div class="select">
+          <select id="modify-modal-user-manual" name="unit" required>
+            {{#each userManuals}}
+            <option>{{this}}</option>
+            {{/each}}
+          </select>
+        </div>
       </div>
     </div>
 
@@ -55,11 +88,14 @@
     columns: [
       { title: "id", field: "id", visible: false },
       { title: "STT", field: "STT", formatter: "rownum", width: 100 },
-      { title: "Triệu chứng", field: "description", sorter: "string" },
+      { title: "Tên", field: "name", sorter: "string" },
+      { title: "Đơn vị", field: "unit", sorter: "string" },
+      { title: "Giá", field: "price", sorter: "number", width: 150 },
+      { title: "Cách dùng", field: "userManual", sorter: "string" },
     ],
   });
 
-  $("#load-data-button").onclick = function () { table.setData("/api/fake/disease"); };
+  $("#load-data-button").onclick = function () { table.setData("/api/fake/medicine"); };
   $("#select-all-button").onclick = function () { table.selectRow(); };
   $("#deselect-all-button").onclick = function () { table.deselectRow(); }
 
@@ -85,7 +121,7 @@
   modifyButton.onclick = function () {
     isCreate = false;
     const row = table.getSelectedData()[0];
-    nameModifyModalInput.value = row.description;
+    nameModifyModalInput.value = row.name;
     formModal.classList.add("is-active");
   };
 
@@ -98,17 +134,22 @@
   $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active"); };
   $("#modify-modal-confirm").onclick = function (e) {
     e.preventDefault();
-    const description = nameModifyModalInput.value;
+    
+    const name = nameModifyModalInput.value;
+    const hasError = false;
 
-    if (description.length === 0) {
+    if (name.length === 0) {
       nameModifyModalInput.classList.add("is-danger");
+      hasError = true;
+    }
+    if (hasError) {
       return;
     }
 
     if (isCreate) {
-      table.addData([ {id: Math.round(Math.random() * 10000), description} ], true);
+      table.addData([ {id: Math.round(Math.random() * 10000), name, gender, yearOfBirth, address} ], true);
     } else {
-      table.updateData([{ id: table.getSelectedData()[0].id, description }]);
+      table.updateData([{ id: table.getSelectedData()[0].id, name, gender, yearOfBirth, address }]);
     }
 
     formModal.classList.remove("is-active");
