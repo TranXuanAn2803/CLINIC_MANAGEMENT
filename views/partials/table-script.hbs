@@ -1,0 +1,51 @@
+<script>
+  const table = new Tabulator("#table", {
+    layout: "fitColumns",
+    selectable: true,
+    height: "88vh",
+    selectableRangeMode: "click",
+    placeholder: "Không có dữ liệu",
+    columns: TABLE_COLUMNS,
+  });
+
+  $("#load-data-button").onclick = function () { table.setData(DATA_URL); };
+  $("#select-all-button").onclick = function () { table.selectRow(); };
+  $("#deselect-all-button").onclick = function () { table.deselectRow(); }
+
+  const modifyButton = $("#modify-button");
+  const deleteButton = $("#delete-button");
+  const confirmFormModal = $("#confirm-modal");
+  let isCreate = false;
+
+  table.on("rowSelectionChanged", function (data, rows) {
+    modifyButton.disabled = data.length !== 1;
+    deleteButton.disabled = data.length === 0;
+  });
+
+  $("#create-button").onclick = function () {
+    isCreate = true;
+    onCreateButtonClicked();
+  };
+
+  modifyButton.onclick = function () {
+    isCreate = false;
+    const row = table.getSelectedData()[0];
+    onModifyButtonClicked(row);
+    formModal.classList.add("is-active");
+  };
+
+  deleteButton.onclick = function () { confirmFormModal.classList.add("is-active"); };
+
+  $("#filter-input").onchange = function (e) {
+    table.setFilter("name", "like", e.target.value);
+  };
+
+  $("#confirm-modal-close").onclick = function () { confirmFormModal.classList.remove("is-active") }
+
+  $("#confirm-modal-confirm").onclick = function (e) {
+    e.preventDefault();
+    onConfirmModalConfirmButtonClicked(table);
+    confirmFormModal.classList.remove("is-active");
+    table.deselectRow();
+  }
+</script>

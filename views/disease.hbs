@@ -1,13 +1,4 @@
-<div class="m-2">
-  <button class="button" id="load-data-button">Tải dữ liệu</button>
-  <button class="button" id="select-all-button">Chọn tất cả</button>
-  <button class="button" id="deselect-all-button">Bỏ chọn tất cả</button>
-  <button class="button is-primary" id="create-button">Thêm</button>
-  <button class="button is-info" id="modify-button" disabled>Cập nhật</button>
-  <button class="button is-danger" id="delete-button">Xóa</button>
-  <input class="input is-primary" id="filter-input" type="text" placeholder="Nhập tên cần lọc" style="width: 500px;">
-</div>
-<div id="table"></div>
+{{> table}}
 
 <form id="modify-modal" class="modal">
   <div class="modal-background"></div>
@@ -16,7 +7,7 @@
     <div class="field">
       <label class="label">Triệu chứng</label>
       <div class="control">
-        <input id="modify-modal-name" name="description" class="input" type="text" required>
+        <input id="modify-modal-description" name="description" class="input" type="text" required>
       </div>
     </div>
 
@@ -31,94 +22,46 @@
   </div>
 </form>
 
-<form id="delete-modal" class="modal">
-  <div class="modal-background"></div>
-  <div class="modal-content box">
-    <p class="is-size-4 has-text-centered has-text-weight-bold pb-3">Bạn có chắc muốn xóa?</p>
-    <div class="field is-grouped columns is-justify-content-center py-4">
-      <div class="control">
-        <button id="delete-modal-confirm" class="button column is-link is-inline-flex" type="button">Xác
-          nhận</button>
-      </div>
-      <div class="control">
-        <button id="delete-modal-close" class="button column is-link is-light is-inline-flex" type="button">Hủy
-          bỏ</button>
-      </div>
-    </div>
-  </div>
-</form>
-
-
 <script>
-  const table = new Tabulator("#table", {
-    ...tabulatorConfig,
-    columns: [
-      { title: "id", field: "id", visible: false },
-      { title: "STT", field: "STT", formatter: "rownum", width: 100 },
-      { title: "Triệu chứng", field: "description", sorter: "string" },
-    ],
-  });
+  const TABLE_COLUMNS = [
+    { title: "id", field: "id", visible: false },
+    { title: "STT", field: "STT", formatter: "rownum", width: 100 },
+    { title: "Triệu chứng", field: "description", sorter: "string" },
+  ];
 
-  $("#load-data-button").onclick = function () { table.setData("/api/fake/disease"); };
-  $("#select-all-button").onclick = function () { table.selectRow(); };
-  $("#deselect-all-button").onclick = function () { table.deselectRow(); }
-
-  const modifyButton = $("#modify-button");
-  const deleteButton = $("#delete-button");
-  let isCreate = false;
+  const DATA_URL = "/api/fake/disease";
 
   const formModal = $("#modify-modal");
-  const nameModifyModalInput = $("#modify-modal-name");
+  const descriptionModifyModalInput = $("#modify-modal-description");
 
-  const deleteFormModal = $("#delete-modal");
+  const onCreateButtonClicked = () => { formModal.classList.add("is-active"); }
+  const onConfirmModalConfirmButtonClicked =
+    table => table.deleteRow(table.getSelectedData().map(function (r) { return r.id; }));
 
-  table.on("rowSelectionChanged", function (data, rows) {
-    modifyButton.disabled = data.length !== 1;
-    deleteButton.disabled = data.length === 0;
-  });
-
-  $("#create-button").onclick = function () {
-    isCreate = true;
-    formModal.classList.add("is-active");
-  };
-
-  modifyButton.onclick = function () {
-    isCreate = false;
-    const row = table.getSelectedData()[0];
-    nameModifyModalInput.value = row.description;
-    formModal.classList.add("is-active");
-  };
-
-  deleteButton.onclick = function () { deleteFormModal.classList.add("is-active"); };
-
-  $("#filter-input").onchange = function (e) {
-    table.setFilter("name", "like", e.target.value);
+  const onModifyButtonClicked = row => {
+    descriptionModifyModalInput.value = row.description;
   };
 
   $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active"); };
   $("#modify-modal-confirm").onclick = function (e) {
     e.preventDefault();
-    const description = nameModifyModalInput.value;
+
+    const description = descriptionModifyModalInput.value;
 
     if (description.length === 0) {
-      nameModifyModalInput.classList.add("is-danger");
+      descriptionModifyModalInput.classList.add("is-danger");
       return;
     }
 
     if (isCreate) {
-      table.addData([ {id: Math.round(Math.random() * 10000), description} ], true);
+      table.addData([{ id: Math.round(Math.random() * 10000), description }], true);
     } else {
       table.updateData([{ id: table.getSelectedData()[0].id, description }]);
     }
 
     formModal.classList.remove("is-active");
     table.deselectRow();
-  }
-
-  $("#delete-modal-close").onclick = function () { deleteFormModal.classList.remove("is-active") }
-  $("#delete-modal-confirm").onclick = function () {
-    table.deleteRow(table.getSelectedData().map(function (r) { return r.id; }));
-    deleteFormModal.classList.remove("is-active");
-    table.deselectRow();
-  }
+  };
 </script>
+
+{{> table-script}}
