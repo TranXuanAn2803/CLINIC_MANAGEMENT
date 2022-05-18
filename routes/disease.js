@@ -1,7 +1,6 @@
 const router = require('express').Router();
+const controller = require('../controllers/disease');
 
-router.get('/', (_, res) => {
-  res.render('disease', { title: 'Bệnh' });
-});
+router.get('/', controller.view);
 
 module.exports = router;
