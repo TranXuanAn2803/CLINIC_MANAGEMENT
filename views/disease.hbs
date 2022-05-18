@@ -14,35 +14,9 @@
 
   <div class="modal-content box">
     <div class="field">
-      <label class="label">Tên</label>
+      <label class="label">Triệu chứng</label>
       <div class="control">
-        <input id="modify-modal-name" name="name" class="input" type="text" required>
-      </div>
-    </div>
-
-    <div class="field">
-      <label class="label">Giới tính</label>
-      <div class="control">
-        <div class="select">
-          <select id="modify-modal-gender" name="gender" required>
-            <option>Nam</option>
-            <option>Nữ</option>
-          </select>
-        </div>
-      </div>modal
-    </div>
-
-    <div class="field">
-      <label class="label">Năm sinh</label>
-      <div class="control">
-        <input id="modify-modal-year-of-birth" , name="yearOfBirth" class="input" type="number" required>
-      </div>
-    </div>
-
-    <div class="field">
-      <label class="label">Địa chỉ</label>
-      <div class="control">
-        <input id="modify-modal-address" name="address" class="input" type="text">
+        <input id="modify-modal-name" name="description" class="input" type="text" required>
       </div>
     </div>
 
@@ -76,12 +50,8 @@
 
 
 <script>
-  var table = new Tabulator("#table", {
-    layout: "fitColumns",
-    selectable: true,
-    height: "88vh",
-    selectableRangeMode: "click",
-    placeholder: "Không có dữ liệu",
+  const table = new Tabulator("#table", {
+    ...tabulatorConfig,
     columns: [
       { title: "id", field: "id", visible: false },
       { title: "STT", field: "STT", formatter: "rownum", width: 100 },
@@ -93,17 +63,14 @@
   $("#select-all-button").onclick = function () { table.selectRow(); };
   $("#deselect-all-button").onclick = function () { table.deselectRow(); }
 
-  var modifyButton = $("#modify-button");
-  var deleteButton = $("#delete-button");
-  var isCreate = false;
+  const modifyButton = $("#modify-button");
+  const deleteButton = $("#delete-button");
+  const isCreate = false;
 
-  var formModal = $("#modify-modal");
-  var nameModifyModalInput = $("#modify-modal-name");
-  var genderModifyModalInput = $("#modify-modal-gender");
-  var yearOfBirthModifyModalInput = $("#modify-modal-year-of-birth");
-  var addressModifyModalInput = $("#modify-modal-address");
+  const formModal = $("#modify-modal");
+  const nameModifyModalInput = $("#modify-modal-name");
 
-  var deleteFormModal = $("#delete-modal");
+  const deleteFormModal = $("#delete-modal");
 
   table.on("rowSelectionChanged", function (data, rows) {
     modifyButton.disabled = data.length !== 1;
@@ -117,10 +84,8 @@
 
   modifyButton.onclick = function () {
     isCreate = false;
-    var row = table.getSelectedData()[0];
-    nameModifyModalInput.value = row.name;
-    yearOfBirthModifyModalInput.value = row.yearOfBirth;
-    addressModifyModalInput.value = row.address;
+    const row = table.getSelectedData()[0];
+    nameModifyModalInput.value = row.description;
     formModal.classList.add("is-active");
   };
 
@@ -133,29 +98,17 @@
   $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active"); };
   $("#modify-modal-confirm").onclick = function (e) {
     e.preventDefault();
-    
-    var name = nameModifyModalInput.value;
-    var gender = genderModifyModalInput.value;
-    var yearOfBirth = yearOfBirthModifyModalInput.value;
-    var address = addressModifyModalInput.value;
-    var hasError = false;
+    const description = nameModifyModalInput.value;
 
-    if (name.length === 0) {
+    if (description.length === 0) {
       nameModifyModalInput.classList.add("is-danger");
-      hasError = true;
-    }
-    if (address.length === 0) {
-      addressModifyModalInput.classList.add("is-danger");
-      hasError = true;
-    }
-    if (hasError) {
       return;
     }
 
     if (isCreate) {
-      table.addData([ {id: Math.round(Math.random() * 10000), name, gender, yearOfBirth, address} ], true);
+      table.addData([ {id: Math.round(Math.random() * 10000), description} ], true);
     } else {
-      table.updateData([{ id: table.getSelectedData()[0].id, name, gender, yearOfBirth, address }]);
+      table.updateData([{ id: table.getSelectedData()[0].id, description }]);
     }
 
     formModal.classList.remove("is-active");

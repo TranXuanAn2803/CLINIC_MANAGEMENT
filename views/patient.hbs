@@ -76,12 +76,8 @@
 
 
 <script>
-  var table = new Tabulator("#table", {
-    layout: "fitColumns",
-    selectable: true,
-    height: "88vh",
-    selectableRangeMode: "click",
-    placeholder: "Không có dữ liệu",
+  const table = new Tabulator("#table", {
+    ...tabulatorConfig,
     columns: [
       { title: "id", field: "id", visible: false },
       { title: "STT", field: "STT", formatter: "rownum", width: 100 },
@@ -96,17 +92,17 @@
   $("#select-all-button").onclick = function () { table.selectRow(); };
   $("#deselect-all-button").onclick = function () { table.deselectRow(); }
 
-  var modifyButton = $("#modify-button");
-  var deleteButton = $("#delete-button");
-  var isCreate = false;
+  const modifyButton = $("#modify-button");
+  const deleteButton = $("#delete-button");
+  const isCreate = false;
 
-  var formModal = $("#modify-modal");
-  var nameModifyModalInput = $("#modify-modal-name");
-  var genderModifyModalInput = $("#modify-modal-gender");
-  var yearOfBirthModifyModalInput = $("#modify-modal-year-of-birth");
-  var addressModifyModalInput = $("#modify-modal-address");
+  const formModal = $("#modify-modal");
+  const nameModifyModalInput = $("#modify-modal-name");
+  const genderModifyModalInput = $("#modify-modal-gender");
+  const yearOfBirthModifyModalInput = $("#modify-modal-year-of-birth");
+  const addressModifyModalInput = $("#modify-modal-address");
 
-  var deleteFormModal = $("#delete-modal");
+  const deleteFormModal = $("#delete-modal");
 
   table.on("rowSelectionChanged", function (data, rows) {
     modifyButton.disabled = data.length !== 1;
@@ -120,7 +116,7 @@
 
   modifyButton.onclick = function () {
     isCreate = false;
-    var row = table.getSelectedData()[0];
+    const row = table.getSelectedData()[0];
     nameModifyModalInput.value = row.name;
     yearOfBirthModifyModalInput.value = row.yearOfBirth;
     addressModifyModalInput.value = row.address;
@@ -137,11 +133,11 @@
   $("#modify-modal-confirm").onclick = function (e) {
     e.preventDefault();
     
-    var name = nameModifyModalInput.value;
-    var gender = genderModifyModalInput.value;
-    var yearOfBirth = yearOfBirthModifyModalInput.value;
-    var address = addressModifyModalInput.value;
-    var hasError = false;
+    const name = nameModifyModalInput.value;
+    const gender = genderModifyModalInput.value;
+    const yearOfBirth = yearOfBirthModifyModalInput.value;
+    const address = addressModifyModalInput.value;
+    const hasError = false;
 
     if (name.length === 0) {
       nameModifyModalInput.classList.add("is-danger");

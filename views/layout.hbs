@@ -15,6 +15,15 @@
     function $(selector) {
       return document.querySelector(selector);
     };
+
+    const tabulatorConfig = {
+      layout: "fitColumns",
+      selectable: true,
+      height: "88vh",
+      selectableRangeMode: "click",
+      placeholder: "Không có dữ liệu",
+    };
+
   </script>
 </head>
 
@@ -32,7 +41,7 @@
         <a class="navbar-item">Phiếu Khám</a>
         <a class="navbar-item" href="/patient">Bệnh Nhân</a>
         <a class="navbar-item" href="/disease">Bệnh</a>
-        <a class="navbar-item" >Thuốc</a>
+        <a class="navbar-item">Thuốc</a>
         <a class="navbar-item">Báo cáo</a>
         <a class="navbar-item">Quy Định</a>
       </div>
