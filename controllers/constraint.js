@@ -8,6 +8,4 @@ const view = (_, res) => {
   });
 };
 
-module.exports = {
-  view
-};
+module.exports = { view };

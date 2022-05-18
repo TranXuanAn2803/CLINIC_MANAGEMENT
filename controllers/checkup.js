@@ -1,5 +1,5 @@
 const view = (_, res) => {
-  res.render('patient', { title: 'Xem bệnh nhân' });
+  res.render('checkup', { title: 'Phiếu khám' });
 };
 
 module.exports = { view };

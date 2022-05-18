@@ -61,7 +61,15 @@
     { title: "STT", field: "STT", formatter: "rownum", width: 100 },
     { title: "Tên", field: "name", sorter: "string" },
     { title: "Đơn vị", field: "unit", sorter: "string" },
-    { title: "Giá", field: "price", sorter: "number", width: 150 },
+    {
+      title: "Giá", field: "price", sorter: "number", width: 150, formatter: "money", formatterParams: {
+        decimal: ",",
+        thousand: ".",
+        symbol: "đ",
+        symbolAfter: "p",
+        precision: false,
+      }
+    },
     { title: "Cách dùng", field: "userManual", sorter: "string" },
   ];
 
