@@ -3,13 +3,11 @@ const apiConstraint = require("../models/api/constraint");
 var moment = require('moment');
 
 var moment = require('moment');
-const { use } = require("../routes/patient");
-const checkupMedicine = require("../models/schemas/checkup-medicine");
-const async = require("hbs/lib/async");
 
 const view = (_, res) => {
-    res.render('checkup', { title: 'Xem bệnh nhân' });
+    res.render('checkup', { title: 'Phiếu khám' });
 };
+
 const viewlist = async(req, res) => {
     var checkup = await apiCheckup.listCheckUp2();
     for (var c of checkup) {

@@ -1,8 +1,12 @@
 const apiMedicine = require("../models/api/medicine");
+const UNITS = ['Viên', 'Liều', 'cc'];
+const USER_MANUALS = ['Cách dùng 1', 'Cách dùng 2', 'Cách dùng 3', 'Cách dùng 4'];
 
 const view = (_, res) => {
-    res.render('medicine', { title: 'Xem bệnh nhân' });
+    res.render('medicine', { title: 'Thuốc', units: UNITS, userManuals: USER_MANUALS });
 };
+
+
 const addMedicine = async(req, res) => {
     const medicine = {
         name: "panadol",

@@ -1,7 +1,6 @@
 const apiPatient = require("../models/api/patient");
 const apiCheckup = require("../models/api/checkup");
 
-const patient = require("../models/schemas/patient");
 var moment = require('moment');
 const view = (_, res) => {
     res.render('patient', { title: 'Xem bệnh nhân' });

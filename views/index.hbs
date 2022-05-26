@@ -1,1 +1,16 @@
-<div>There is nothing here</div>
+{{> table}}
+{{> confirm-modal}}
+
+<script>
+
+  tableColumns = [
+    { title: "id", field: "id", visible: false },
+    { title: "STT", field: "STT", formatter: "rownum", width: 100 },
+    { title: "Tên", field: "name", sorter: "string" },
+    { title: "Giới tính", field: "gender", sorter: "string" },
+    { title: "Năm sinh", field: "yearOfBirth", sorter: "number", width: 150 },
+    { title: "Địa chỉ", field: "address", sorter: "string" },
+  ];
+</script>
+
+{{> table-script}}

@@ -1,7 +1,7 @@
 const apiDisease = require("../models/api/disease");
 
 const view = (_, res) => {
-    res.render('disease', { title: 'Xem bệnh nhân' });
+    res.render('disease', { title: 'Bệnh' });
 };
 const addDisease = async(req, res) => {
     const disease = {

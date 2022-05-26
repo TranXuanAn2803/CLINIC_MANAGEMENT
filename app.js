@@ -7,15 +7,19 @@ const exphbs = require('express-handlebars');
 
 const indexRouter = require('./routes/index');
 const apiRouter = require('./routes/api');
+const checkupRouter = require('./routes/checkup');
 const patientRouter = require('./routes/patient');
+const diseaseRouter = require('./routes/disease');
+const medicineRouter = require('./routes/medicine');
+const constraintRouter = require('./routes/constraint');
 
 const app = express();
 
 const hbs = exphbs.create({
-  extname: 'hbs',
-  defaultLayout: 'layout',
-  layoutsDir: path.join(__dirname, 'views/'),
-  partialsDir: path.join(__dirname, 'views/partials/')
+    extname: 'hbs',
+    defaultLayout: 'layout',
+    layoutsDir: path.join(__dirname, 'views/'),
+    partialsDir: path.join(__dirname, 'views/partials/')
 });
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
@@ -32,21 +36,25 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
 app.use('/patient', patientRouter);
+app.use('/checkup', checkupRouter);
+app.use('/disease', diseaseRouter);
+app.use('/medicine', medicineRouter);
+app.use('/constraint', constraintRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
-  next(createError(404));
+    next(createError(404));
 });
 
 // error handler
 app.use((err, req, res) => {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
 });
 
 module.exports = app;

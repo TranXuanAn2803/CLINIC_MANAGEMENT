@@ -1,13 +1,4 @@
-<div class="m-2">
-  <button class="button" id="load-data-button">Tải dữ liệu</button>
-  <button class="button" id="select-all-button">Chọn tất cả</button>
-  <button class="button" id="deselect-all-button">Bỏ chọn tất cả</button>
-  <button class="button is-primary" id="create-button">Thêm</button>
-  <button class="button is-info" id="modify-button" disabled>Cập nhật</button>
-  <button class="button is-danger" id="delete-button">Xóa</button>
-  <input class="input is-primary" id="filter-input" type="text" placeholder="Nhập tên cần lọc" style="width: 500px;">
-</div>
-<div id="table"></div>
+{{> table}}
 
 <form id="modify-modal" class="modal">
   <div class="modal-background"></div>
@@ -29,7 +20,7 @@
             <option>Nữ</option>
           </select>
         </div>
-      </div>modal
+      </div>
     </div>
 
     <div class="field">
@@ -57,91 +48,43 @@
   </div>
 </form>
 
-<form id="delete-modal" class="modal">
-  <div class="modal-background"></div>
-  <div class="modal-content box">
-    <p class="is-size-4 has-text-centered has-text-weight-bold pb-3">Bạn có chắc muốn xóa?</p>
-    <div class="field is-grouped columns is-justify-content-center py-4">
-      <div class="control">
-        <button id="delete-modal-confirm" class="button column is-link is-inline-flex" type="button">Xác
-          nhận</button>
-      </div>
-      <div class="control">
-        <button id="delete-modal-close" class="button column is-link is-light is-inline-flex" type="button">Hủy
-          bỏ</button>
-      </div>
-    </div>
-  </div>
-</form>
-
-
 <script>
-  var table = new Tabulator("#table", {
-    layout: "fitColumns",
-    selectable: true,
-    height: "88vh",
-    selectableRangeMode: "click",
-    placeholder: "Không có dữ liệu",
-    columns: [
-      { title: "id", field: "id", visible: false },
-      { title: "STT", field: "STT", formatter: "rownum", width: 100 },
-      { title: "Tên", field: "name", sorter: "string" },
-      { title: "Giới tính", field: "gender", sorter: "string" },
-      { title: "Năm sinh", field: "yearOfBirth", sorter: "number", width: 150 },
-      { title: "Địa chỉ", field: "address", sorter: "string" },
-    ],
-  });
+  const TABLE_COLUMNS = [
+    { title: "id", field: "id", visible: false },
+    { title: "STT", field: "STT", formatter: "rownum", width: 100 },
+    { title: "Tên", field: "name", sorter: "string" },
+    { title: "Giới tính", field: "gender", sorter: "string" },
+    { title: "Năm sinh", field: "yearOfBirth", sorter: "number", width: 150 },
+    { title: "Địa chỉ", field: "address", sorter: "string" },
+  ];
 
-  $("#load-data-button").onclick = function () { table.setData("/api/data"); };
-  $("#select-all-button").onclick = function () { table.selectRow(); };
-  $("#deselect-all-button").onclick = function () { table.deselectRow(); }
+  const DATA_URL = "/api/fake/patient";
 
-  var modifyButton = $("#modify-button");
-  var deleteButton = $("#delete-button");
-  var isCreate = false;
+  const formModal = $("#modify-modal");
+  const nameModifyModalInput = $("#modify-modal-name");
+  const genderModifyModalInput = $("#modify-modal-gender");
+  const yearOfBirthModifyModalInput = $("#modify-modal-year-of-birth");
+  const addressModifyModalInput = $("#modify-modal-address");
 
-  var formModal = $("#modify-modal");
-  var nameModifyModalInput = $("#modify-modal-name");
-  var genderModifyModalInput = $("#modify-modal-gender");
-  var yearOfBirthModifyModalInput = $("#modify-modal-year-of-birth");
-  var addressModifyModalInput = $("#modify-modal-address");
+  const onCreateButtonClicked = () => { formModal.classList.add("is-active"); }
+  const onConfirmModalConfirmButtonClicked =
+    table => table.deleteRow(table.getSelectedData().map(function (r) { return r.id; }));
 
-  var deleteFormModal = $("#delete-modal");
-
-  table.on("rowSelectionChanged", function (data, rows) {
-    modifyButton.disabled = data.length !== 1;
-    deleteButton.disabled = data.length === 0;
-  });
-
-  $("#create-button").onclick = function () {
-    isCreate = true;
-    formModal.classList.add("is-active");
-  };
-
-  modifyButton.onclick = function () {
-    isCreate = false;
-    var row = table.getSelectedData()[0];
+  const onModifyButtonClicked = row => {
     nameModifyModalInput.value = row.name;
     yearOfBirthModifyModalInput.value = row.yearOfBirth;
     addressModifyModalInput.value = row.address;
-    formModal.classList.add("is-active");
-  };
-
-  deleteButton.onclick = function () { deleteFormModal.classList.add("is-active"); };
-
-  $("#filter-input").onchange = function (e) {
-    table.setFilter("name", "like", e.target.value);
   };
 
   $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active"); };
   $("#modify-modal-confirm").onclick = function (e) {
     e.preventDefault();
-    
-    var name = nameModifyModalInput.value;
-    var gender = genderModifyModalInput.value;
-    var yearOfBirth = yearOfBirthModifyModalInput.value;
-    var address = addressModifyModalInput.value;
-    var hasError = false;
+
+    const name = nameModifyModalInput.value;
+    const gender = genderModifyModalInput.value;
+    const yearOfBirth = yearOfBirthModifyModalInput.value;
+    const address = addressModifyModalInput.value;
+    const hasError = false;
 
     if (name.length === 0) {
       nameModifyModalInput.classList.add("is-danger");
@@ -156,7 +99,7 @@
     }
 
     if (isCreate) {
-      table.addData([ {id: Math.round(Math.random() * 10000), name, gender, yearOfBirth, address} ], true);
+      table.addData([{ id: Math.round(Math.random() * 10000), name, gender, yearOfBirth, address }], true);
     } else {
       table.updateData([{ id: table.getSelectedData()[0].id, name, gender, yearOfBirth, address }]);
     }
@@ -164,11 +107,6 @@
     formModal.classList.remove("is-active");
     table.deselectRow();
   }
-
-  $("#delete-modal-close").onclick = function () { deleteFormModal.classList.remove("is-active") }
-  $("#delete-modal-confirm").onclick = function () {
-    table.deleteRow(table.getSelectedData().map(function (r) { return r.id; }));
-    deleteFormModal.classList.remove("is-active");
-    table.deselectRow();
-  }
 </script>
+
+{{> table-script}}
