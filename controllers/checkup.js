@@ -183,12 +183,12 @@ const deleteCheckUp = async (req, res) => {
     return false;
   }
   try {
-    await apiCheckup.deleteCheckUp_Disease(id);
+    await apiCheckup.deleteCheckUpDisease(id);
   } catch (err) {
     return false;
   }
   try {
-    await apiCheckup.deleteCheckUp_Medicine(id);
+    await apiCheckup.deleteCheckUpMedicine(id);
   } catch (err) {
     return false;
   }
