@@ -3,8 +3,8 @@ const { Op } = require('sequelize');
 
 const listPatient = () => models.patient.findAll({ order: [['id', 'ASC']] });
 
-const findPatient = (startdate, enddate) => {
-  return models.patient.findAll({
+const findPatient = (startdate, enddate) =>
+  models.patient.findAll({
     order: [['id', 'ASC']],
     include: [{
       model: models.checkup,
@@ -15,34 +15,16 @@ const findPatient = (startdate, enddate) => {
     raw: true,
     nest: true
   });
-};
 
 const addPatient = async ({ name, gender, yearOfBirth, address }) => {
-  try {
-    await models.patient.create({ name, gender, yearOfBirth, address });
-  } catch (err) {
-    console.log(err.message);
-    throw (err);
-  }
+  await models.patient.create({ name, gender, yearOfBirth, address });
 };
 
 const updatePatient = async ({ id, name, gender, yearOfBirth, address }) => {
-  try {
-    await models.patient.update({ name, gender, yearOfBirth, address }, { where: { id } });
-  } catch (err) {
-    console.log(err.message);
-    throw (err);
-  }
+  await models.patient.update({ name, gender, yearOfBirth, address }, { where: { id } });
 };
 
-const deletePatient = async (id) => {
-  try {
-    await models.patient.destroy({ where: { id } });
-  } catch (err) {
-    console.log(err.message);
-    throw (err);
-  }
-};
+const deletePatient = async (id) => { await models.patient.destroy({ where: { id } }); };
 
 module.exports = {
   listPatient,

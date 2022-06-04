@@ -22,31 +22,14 @@ const listMedicine = () => {
 };
 
 const addMedicine = async ({ name, unit, usermanual, price }) => {
-  try {
-    await models.medicine.create({ name, unit, usermanual, price });
-  } catch (err) {
-    console.log(err.message);
-    throw (err);
-  }
+  await models.medicine.create({ name, unit, usermanual, price });
 };
 
 const updateMedicine = async ({ id, name, unit, usermanual, price }) => {
-  try {
-    await models.medicine.update({ name, unit, usermanual, price }, { where: { id } });
-  } catch (err) {
-    console.log(err.message);
-    throw (err);
-  }
+  await models.medicine.update({ name, unit, usermanual, price }, { where: { id } });
 };
 
-const deleteMedicine = async (id) => {
-  try {
-    await models.medicine.update({ isDeleted: true }, { where: { id } });
-  } catch (err) {
-    console.log(err.message);
-    throw (err);
-  }
-};
+const deleteMedicine = async id => { await models.medicine.update({ isDeleted: true }, { where: { id } }); };
 
 module.exports = {
   listMedicine,

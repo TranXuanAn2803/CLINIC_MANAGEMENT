@@ -2,8 +2,8 @@ const { models } = require('../../config/DBconnect');
 const sequelize = require('sequelize');
 const Op = sequelize.Op;
 
-const listCheckUp = () => {
-  return models.checkup.findAll({
+const listCheckUp = () =>
+  models.checkup.findAll({
     where: { isDeleted: false },
     order: [['id', 'ASC']],
     raw: true,
@@ -35,10 +35,9 @@ const listCheckUp = () => {
       }
     }]
   });
-};
 
-const listCheckUp2 = () => {
-  return models.checkup.findAll({
+const listCheckUp2 = () =>
+  models.checkup.findAll({
     raw: true,
     nest: true,
     order: [['id', 'ASC']],
@@ -48,10 +47,9 @@ const listCheckUp2 = () => {
       as: 'patient_patient'
     }]
   });
-};
 
-const findCheckUp = (id) => {
-  return models.checkup.findAll({
+const findCheckUp = (id) =>
+  models.checkup.findAll({
     where: { isDeleted: false, id },
     order: [['id', 'ASC']],
     raw: true,
@@ -62,10 +60,9 @@ const findCheckUp = (id) => {
       as: 'patient_patient'
     }]
   });
-};
 
-const findDisease = async (idcheckup) => {
-  return models.checkupDisease.findAll({
+const findDisease = async (idcheckup) =>
+  models.checkupDisease.findAll({
     where: { isDeleted: false, idcheckup },
     order: [['iddisease', 'ASC']],
     raw: true,
@@ -76,10 +73,9 @@ const findDisease = async (idcheckup) => {
       as: 'iddisease_disease'
     }]
   });
-};
 
-const findMedicine = async (idcheckup) => {
-  return models.checkupMedicine.findAll({
+const findMedicine = async (idcheckup) =>
+  models.checkupMedicine.findAll({
     where: { isDeleted: false, checkup: idcheckup },
     order: [['medicine', 'ASC']],
     raw: true,
@@ -90,137 +86,71 @@ const findMedicine = async (idcheckup) => {
       as: 'medicine_medicine'
     }]
   });
-};
 
 const addCheckup = async ({ patient, symptoms, date }) => {
-  try {
-    await models.checkup.create({ patient, symptoms, date });
-  } catch (err) {
-    console.log(err.message);
-    throw (err);
-  }
+  await models.checkup.create({ patient, symptoms, date });
 };
 
 const addDisease = async ({ idcheckup, iddisease }) => {
-  try {
-    await models.checkupDisease.create({ idcheckup, iddisease });
-  } catch (err) {
-    console.log(err.message);
-    throw (err);
-  }
+  await models.checkupDisease.create({ idcheckup, iddisease });
 };
 
 const updateDisease = async ({ idcheckup, olddisease, newdisease }) => {
-  try {
-    await models.checkupDisease.update(
-      { iddisease: newdisease },
-      { where: { idcheckup, iddisease: olddisease } }
-    );
-  } catch (err) {
-    console.log(err.message);
-    throw (err);
-  }
+  await models.checkupDisease.update(
+    { iddisease: newdisease },
+    { where: { idcheckup, iddisease: olddisease } }
+  );
 };
 const deleteDisease = async (idcheckup, iddisease) => {
-  try {
-    await models.checkupDisease.update({ isDeleted: true }, { where: { idcheckup, iddisease } });
-  } catch (err) {
-    console.log(err.message);
-    throw (err);
-  }
+  await models.checkupDisease.update({ isDeleted: true }, { where: { idcheckup, iddisease } });
 };
 
 const addMedicine = async ({ checkup, medicine, number }) => {
-  try {
-    await models.checkupMedicine.create({ checkup, medicine, number });
-  } catch (err) {
-    console.log(err.message);
-    throw (err);
-  }
+  await models.checkupMedicine.create({ checkup, medicine, number });
 };
 
 const updateMedicine = async ({ checkup, newmedicine, oldmedicine, number }) => {
-  try {
-    await models.checkupMedicine.update(
-      { medicine: newmedicine, number },
-      { where: { checkup, medicine: oldmedicine } }
-    );
-  } catch (err) {
-    console.log(err.message);
-    throw (err);
-  }
+  await models.checkupMedicine.update(
+    { medicine: newmedicine, number },
+    { where: { checkup, medicine: oldmedicine } }
+  );
 };
 
 const deleteMedicine = async (checkup, medicine) => {
-  try {
-    await models.checkupMedicine.update({ isDeleted: true }, { where: { checkup, medicine } });
-  } catch (err) {
-    console.log(err.message);
-    throw (err);
-  }
+  await models.checkupMedicine.update({ isDeleted: true }, { where: { checkup, medicine } });
 };
 
 const updateCheckup = async ({ id, patient, symptoms, date }) => {
-  try {
-    await models.checkup.update({ patient, symptoms, date }, { where: { id } });
-  } catch (err) {
-    console.log(err.message);
-    throw (err);
-  }
+  await models.checkup.update({ patient, symptoms, date }, { where: { id } });
 };
 
 const deleteCheckUp = async (id) => {
-  try {
-    await models.checkup.update({ isDeleted: true }, { where: { id } });
-  } catch (err) {
-    console.log(err.message);
-    throw (err);
-  }
+  await models.checkup.update({ isDeleted: true }, { where: { id } });
 };
 
 const deleteCheckUpMedicine = async (id) => {
-  try {
-    await models.checkupMedicine.update({ isDeleted: true }, { where: { checkup: id } });
-  } catch (err) {
-    console.log(err.message);
-    throw (err);
-  }
+  await models.checkupMedicine.update({ isDeleted: true }, { where: { checkup: id } });
 };
 
 const deleteCheckUpDisease = async (id) => {
-  try {
-    await models.checkupDisease.update({ isDeleted: true }, { where: { idcheckup: id } });
-  } catch (err) {
-    console.log(err.message);
-    throw (err);
-  }
+  await models.checkupDisease.update({ isDeleted: true }, { where: { idcheckup: id } });
 };
 
-const listBill = () => {
-  return models.bill.findAll({
+const listBill = () =>
+  models.bill.findAll({
     order: [['checkup', 'ASC']],
     raw: true,
     nest: true
   });
-};
 
 const findBill = checkup => models.bill.findAll({ where: { checkup } });
 
-const addBill = async (bill) => {
-  try {
-    await models.bill.create({
-      checkup: bill.checkup,
-      examinationFee: bill.examinationFee,
-      medicineFee: bill.medicineFee
-    });
-  } catch (err) {
-    console.log(err.message);
-    throw (err);
-  }
+const addBill = async ({ checkup, medicineFee, examinationFee }) => {
+  await models.bill.create({ checkup, examinationFee, medicineFee });
 };
 
-const saleReport = (month, year) => {
-  return models.checkup.findAll({
+const saleReport = (month, year) =>
+  models.checkup.findAll({
     attributes: [
       'date',
       [sequelize.literal('COUNT("patient_patient")'), 'countOfPatient'],
@@ -252,10 +182,9 @@ const saleReport = (month, year) => {
     raw: true,
     nest: true
   });
-};
 
-const medicineReport = (month, year) => {
-  return models.medicine.findAll({
+const medicineReport = (month, year) =>
+  models.medicine.findAll({
     attributes: [
       'name',
       [sequelize.fn('DISTINCT', sequelize.col('"medicine"."id"')), 'id'],
@@ -299,10 +228,9 @@ const medicineReport = (month, year) => {
     raw: true,
     nest: true
   });
-};
 
-const listPatientOfDate = (date) => {
-  return models.checkup.findAll({
+const listPatientOfDate = date =>
+  models.checkup.findAll({
     where: { date, isDeleted: false },
     order: [['id', 'ASC']],
     include: [{
@@ -313,10 +241,9 @@ const listPatientOfDate = (date) => {
     raw: true,
     nest: true
   });
-};
 
-const countPatientOfDate = (date) => {
-  return models.checkup.findAll({
+const countPatientOfDate = date =>
+  models.checkup.findAll({
     attributes: [[sequelize.literal('COUNT("patient_patient")'), 'count']],
     where: { date, isDeleted: false },
     include: [{
@@ -328,7 +255,6 @@ const countPatientOfDate = (date) => {
     raw: true,
     nest: true
   });
-};
 
 module.exports = {
   listCheckUp,
