@@ -1,34 +1,15 @@
 const { models } = require('../../config/DBconnect');
 
-// TODO: maybe change from find all to find one ???
+const findConstraint = att => models.constraint.findOne({ attributes: [att] });
 
-const username = async () => {
-  const u = await models.constraint.findAll({ attributes: ['username'] });
-  return u[0];
-};
+const username = findConstraint('username');
 
-const password = async () => {
-  const p = await models.constraint.findAll({
-    attributes: ['password']
+const password = findConstraint('password');
 
-  });
-  return p[0];
-};
-const maxPatient = async () => {
-  const m = await models.constraint.findAll({
-    attributes: ['maxPatient']
+const maxPatient = findConstraint('maxPatient');
 
-  });
-  return m[0];
-};
+const examinationFee = findConstraint('examinationFee');
 
-const examinationFee = async () => {
-  const e = await models.constraint.findAll({
-    attributes: ['examinationFee']
-
-  });
-  return e[0];
-};
 module.exports = {
   username,
   password,
