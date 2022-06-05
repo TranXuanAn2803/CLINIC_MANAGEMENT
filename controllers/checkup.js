@@ -17,7 +17,7 @@ const viewlist = async(req, res) => {
         var medicine = await apiCheckup.findMedicine(c.id)
 
         for (var d of disease) {
-            stringDisease = stringDisease + (d.iddisease_disease.desciption) + " "
+            stringDisease = stringDisease + (d.iddisease_disease.description) + " "
         }
         c.disease = stringDisease
         for (var m of medicine) {
@@ -42,7 +42,7 @@ const viewCheckUp = async(req, res) => {
     var medicine = await apiCheckup.findMedicine(id)
 
     for (var d of disease) {
-        stringDisease = stringDisease + (d.iddisease_disease.desciption) + " "
+        stringDisease = stringDisease + (d.iddisease_disease.description) + " "
     }
     checkup.disease = stringDisease
 

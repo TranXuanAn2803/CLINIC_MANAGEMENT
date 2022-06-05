@@ -107,6 +107,15 @@
     formModal.classList.remove("is-active");
     table.deselectRow();
   }
+
 </script>
 
 {{> table-script}}
+<script>
+    async function load() { 
+    console.log(DATA_URL)
+    table.setData(DATA_URL);
+
+  };
+
+</script>

@@ -3,9 +3,15 @@ const apiDisease = require("../models/api/disease");
 const view = (_, res) => {
     res.render('disease', { title: 'Bệnh' });
 };
+const listDisease = async(req, res) => {
+    const disease = await apiDisease.listDisease();
+
+    return disease;
+};
+
 const addDisease = async(req, res) => {
     const disease = {
-        desciption: "cam"
+        description: "cam"
     }
     try {
         await apiDisease.addDisease(disease);
@@ -20,7 +26,7 @@ const addDisease = async(req, res) => {
 const editDisease = async(req, res) => {
     const disease = {
         id: 1,
-        desciption: "viem hong"
+        description: "viem hong"
     }
 
     try {
@@ -49,5 +55,6 @@ module.exports = {
     view,
     addDisease,
     editDisease,
-    deleteDisease
+    deleteDisease,
+    listDisease
 };

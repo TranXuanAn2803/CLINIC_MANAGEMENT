@@ -1,5 +1,5 @@
 const { models } = require("../../config/DBconnect");
-const { QueryTypes } = require("sequelize");
+const { QueryTypes, where } = require("sequelize");
 const sequelize = require("sequelize");
 const Op = sequelize.Op;
 
@@ -35,9 +35,43 @@ const examinationFee = async() => {
     });
     return e[0]
 };
+const editMaxPatient = async(max, old) => {
+    try {
+        await models.constraint.update({
+            maxPatient: max
+        }, {
+            where: {
+                maxPatient: old.maxPatient
+            }
+        });
+
+    } catch (err) {
+        console.log(err.message)
+        throw (err)
+    }
+};
+
+const editExaminationFee = async(fee, old) => {
+
+    try {
+        await models.constraint.update({
+            examinationFee: fee
+        }, {
+            where: {
+                examinationFee: old.examinationFee
+            }
+        });
+    } catch (err) {
+        console.log(err.message)
+        throw (err)
+    }
+};
+
 module.exports = {
     username,
     password,
     maxPatient,
-    examinationFee
+    examinationFee,
+    editExaminationFee,
+    editMaxPatient
 };

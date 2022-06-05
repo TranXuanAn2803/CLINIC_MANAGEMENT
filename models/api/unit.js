@@ -4,7 +4,7 @@ const sequelize = require("sequelize");
 const Op = sequelize.Op;
 
 const listUnit = () => {
-    return models.usermanual.findAll({
+    return models.unit.findAll({
         where: { isDeleted: false },
 
         order: [
@@ -12,6 +12,7 @@ const listUnit = () => {
         ],
     });
 };
+
 const addUnit = async(unit) => {
     try {
         await models.unit.create({

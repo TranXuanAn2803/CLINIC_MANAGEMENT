@@ -3,6 +3,11 @@ const apiUnit = require("../models/api/unit");
 const view = (_, res) => {
     res.render('unit', { title: 'Xem bệnh nhân' });
 };
+const listUnit = async(req, res) => {
+    const unit = await apiUnit.listUnit();
+    return unit;
+};
+
 const addUnit = async(req, res) => {
     const unit = {
         type: "vien"
@@ -49,5 +54,6 @@ module.exports = {
     view,
     addUnit,
     editUnit,
-    deleteUnit
+    deleteUnit,
+    listUnit
 };

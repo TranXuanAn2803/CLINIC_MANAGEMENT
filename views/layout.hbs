@@ -15,6 +15,9 @@
     function $(selector) {
       return document.querySelector(selector);
     };
+    function load() {
+      console.log("Hi")
+    };
 
     const tabulatorConfig = {
       layout: "fitColumns",
@@ -27,7 +30,7 @@
   </script>
 </head>
 
-<body>
+<body onload="load()">
 
   <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">

@@ -3,8 +3,14 @@ const apiCheckup = require("../models/api/checkup");
 
 var moment = require('moment');
 const view = (_, res) => {
+
     res.render('patient', { title: 'Xem bệnh nhân' });
 };
+const listPatient = async() => {
+    const patient = await apiPatient.listPatient();
+    return patient
+
+}
 const findPatient = async(req, res) => {
     const startdate = moment("2022-1-1", "YYYY-MM-DD");
 
@@ -23,7 +29,7 @@ const findPatient = async(req, res) => {
         var disease = await apiCheckup.findDisease(p.checkups.id)
 
         for (var d of disease) {
-            stringDisease = stringDisease + (d.iddisease_disease.desciption) + " "
+            stringDisease = stringDisease + (d.iddisease_disease.description) + " "
         }
         p.disease = stringDisease
 
@@ -70,6 +76,7 @@ const deletePatient = async(req, res) => {
     return true;
 };
 module.exports = {
+    listPatient,
     view,
     addPatient,
     editPatient,
