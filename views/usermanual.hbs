@@ -1,0 +1,67 @@
+{{> table}}
+
+<form id="modify-modal" class="modal">
+  <div class="modal-background"></div>
+
+  <div class="modal-content box">
+    <div class="field">
+      <label class="label">Hướng dẫn</label>
+      <div class="control">
+        <input id="modify-modal-description" name="description" class="input" type="text" required>
+      </div>
+    </div>
+
+    <div class="field is-grouped">
+      <div class="control">
+        <button id="modify-modal-confirm" class="button is-link" type="button">Cập nhập</button>
+      </div>
+      <div class="control">
+        <button id="modify-modal-close" class="button is-link is-light" type="button">Hủy bỏ</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script>
+  const TABLE_COLUMNS = [
+    { title: "id", field: "id", visible: false },
+    { title: "STT", field: "STT", formatter: "rownum", width: 100 },
+    { title: "Hướng Dẫn", field: "description", sorter: "string" },
+  ];
+
+  const DATA_URL = "/api/fake/usermanual";
+
+  const formModal = $("#modify-modal");
+  const descriptionModifyModalInput = $("#modify-modal-description");
+
+  const onCreateButtonClicked = () => { formModal.classList.add("is-active"); }
+  const onConfirmModalConfirmButtonClicked =
+    table => table.deleteRow(table.getSelectedData().map(function (r) { return r.id; }));
+
+  const onModifyButtonClicked = row => {
+    descriptionModifyModalInput.value = row.description;
+  };
+
+  $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active"); };
+  $("#modify-modal-confirm").onclick = function (e) {
+    e.preventDefault();
+
+    const description = descriptionModifyModalInput.value;
+
+    if (description.length === 0) {
+      descriptionModifyModalInput.classList.add("is-danger");
+      return;
+    }
+
+    if (isCreate) {
+      table.addData([{ id: Math.round(Math.random() * 10000), description }], true);
+    } else {
+      table.updateData([{ id: table.getSelectedData()[0].id, description }]);
+    }
+
+    formModal.classList.remove("is-active");
+    table.deselectRow();
+  };
+</script>
+
+{{> table-script}}

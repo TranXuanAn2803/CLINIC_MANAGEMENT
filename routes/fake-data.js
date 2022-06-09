@@ -49,8 +49,8 @@ router.get('/unit', (_, res) => {
   res.send(UNITS.map((type, id) => ({ id, type })));
 });
 
-router.get('/user-manual', (_, res) => {
-  res.send(USER_MANUALS);
+router.get('/usermanual', (_, res) => {
+  res.send(USER_MANUALS.map((description, id) => ({ id, description })));
 });
 
 module.exports = router;

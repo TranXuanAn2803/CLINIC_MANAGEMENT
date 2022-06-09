@@ -11,6 +11,7 @@ const checkupRouter = require('./routes/checkup');
 const patientRouter = require('./routes/patient');
 const diseaseRouter = require('./routes/disease');
 const medicineRouter = require('./routes/medicine');
+const usermanualRouter = require('./routes/usermanual');
 const unitRouter = require('./routes/unit');
 const constraintRouter = require('./routes/constraint');
 
@@ -41,6 +42,7 @@ app.use('/checkup', checkupRouter);
 app.use('/disease', diseaseRouter);
 app.use('/medicine', medicineRouter);
 app.use('/unit', unitRouter);
+app.use('/usermanual', usermanualRouter);
 app.use('/constraint', constraintRouter);
 
 app.use((req, res, next) => {
