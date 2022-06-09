@@ -7,6 +7,7 @@ const exphbs = require('express-handlebars');
 
 const indexRouter = require('./routes/index');
 const apiRouter = require('./routes/api');
+const userRouter = require('./routes/user');
 const checkupRouter = require('./routes/checkup');
 const patientRouter = require('./routes/patient');
 const diseaseRouter = require('./routes/disease');
@@ -37,6 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
+app.use('/user', userRouter);
 app.use('/patient', patientRouter);
 app.use('/checkup', checkupRouter);
 app.use('/disease', diseaseRouter);
