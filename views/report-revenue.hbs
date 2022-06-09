@@ -1,0 +1,33 @@
+report-revenue
+<div class="m-2">
+  <div class="select">
+    <select>
+      <option>Chọn Tháng</option>
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+    </select>
+  </div>
+</div>
+<div id="table"></div>
+
+<script>
+  const TABLE_COLUMNS = [
+    { title: "id", field: "id", visible: false },
+    { title: "STT", field: "STT", formatter: "rownum", width: 100 },
+    { title: "Ngày", field: "date", sorter: "number" },
+    { title: "Số bệnh nhân", field: "patientNumber", sorter: "number" },
+    { title: "Doanh thu", field: "revenue", sorter: "number" },
+    { title: "Tỷ lệ", field: "percentage", sorter: "number" },
+  ];
+
+  const table = new Tabulator("#table", {
+    layout: "fitColumns",
+    selectable: true,
+    height: "88vh",
+    selectableRangeMode: "click",
+    placeholder: "Không có dữ liệu",
+    columns: TABLE_COLUMNS,
+  });
+
+</script>
