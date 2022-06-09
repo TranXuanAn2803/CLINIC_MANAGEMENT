@@ -3,7 +3,7 @@ const apiCheckup = require('../models/api/checkup');
 
 const moment = require('moment');
 const view = (_, res) => {
-  res.render('patient', { title: 'Xem bệnh nhân' });
+  res.render('patient', { title: 'Bệnh Nhân' });
 };
 const findPatient = async (req, res) => {
   const startdate = moment('2022-1-1', 'YYYY-MM-DD');

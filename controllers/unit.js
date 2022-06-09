@@ -1,8 +1,9 @@
 const apiUnit = require('../models/api/unit');
 
 const view = (_, res) => {
-  res.render('unit', { title: 'Xem bệnh nhân' });
+  res.render('unit', { title: 'Đơn Vị' });
 };
+
 const addUnit = async (req, res) => {
   const unit = {
     type: 'vien'
@@ -16,6 +17,7 @@ const addUnit = async (req, res) => {
   console.log(p);
   return true;
 };
+
 const editUnit = async (req, res) => {
   const unit = {
     id: 1,
@@ -31,6 +33,7 @@ const editUnit = async (req, res) => {
   console.log(p);
   return true;
 };
+
 const deleteUnit = async (req, res) => {
   const id = 1;
   try {
@@ -42,6 +45,7 @@ const deleteUnit = async (req, res) => {
   console.log(p);
   return true;
 };
+
 module.exports = {
   view,
   addUnit,

@@ -25,16 +25,6 @@ const medicineGenerator = id => ({
   price: parseInt(random.numeric(2) + '000')
 });
 
-const diseaseGenerator = id => ({
-  
-});
-
-const checkupGenerator = id => ({
-  id,
-  patient: patientGenerator(id),
-  symptoms: faker.lorem(),
-});
-
 const generateFakeData = (n, generator) => {
   const data = [];
   for (let i = 0; i < 40; ++i) {
@@ -56,7 +46,7 @@ router.get('/disease', (_, res) => {
 });
 
 router.get('/unit', (_, res) => {
-  res.send(UNITS);
+  res.send(UNITS.map((type, id) => ({ id, type })));
 });
 
 router.get('/user-manual', (_, res) => {

@@ -1,7 +1,7 @@
 const apiUsermanual = require('../models/api/usermanual');
 
 const view = (_, res) => {
-  res.render('usermanual', { title: 'Xem bệnh nhân' });
+  res.render('usermanual', { title: 'Hướng Dẫn Sử Dụng' });
 };
 const addUsermanual = async (req, res) => {
   const usermanual = {
