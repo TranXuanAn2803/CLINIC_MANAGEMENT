@@ -15,7 +15,7 @@ const listDisease = () => {
 const addDisease = async(disease) => {
     try {
         await models.disease.create({
-            desciption: disease.desciption,
+            description: disease.description,
 
         });
     } catch (err) {
@@ -26,7 +26,7 @@ const addDisease = async(disease) => {
 const updateDisease = async(disease) => {
     try {
         await models.disease.update({
-            desciption: disease.desciption,
+            description: disease.description,
 
         }, {
             where: {
