@@ -14,10 +14,9 @@
   const TABLE_COLUMNS = [
     { title: "id", field: "id", visible: false },
     { title: "STT", field: "STT", formatter: "rownum", width: 100 },
-    { title: "Ngày", field: "date", sorter: "number" },
-    { title: "Số bệnh nhân", field: "patientNumber", sorter: "number" },
-    { title: "Doanh thu", field: "revenue", sorter: "number" },
-    { title: "Tỷ lệ", field: "percentage", sorter: "number" },
+    { title: "Đơn vị tính", field: "unit", sorter: "string" },
+    { title: "Số lượng", field: "number", sorter: "number" },
+    { title: "Số lần dùng", field: "useTime", sorter: "number" },
   ];
 
   const table = new Tabulator("#table", {
