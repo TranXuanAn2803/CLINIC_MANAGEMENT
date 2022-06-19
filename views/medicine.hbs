@@ -1,0 +1,141 @@
+{{> table}}
+
+<form id="modify-modal" class="modal">
+  <div class="modal-background"></div>
+
+  <div class="modal-content box">
+    <div class="field">
+      <label class="label">Tên</label>
+      <div class="control">
+        <input id="modify-modal-name" name="name" class="input" type="text" required>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Đơn vị</label>
+      <div class="control">
+        <div class="select">
+          <select id="modify-modal-unit" name="unit" required>
+            {{#each units}}
+            <option>{{this.type}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Giá</label>
+      <div class="control">
+        <input id="modify-modal-price" , name="price" class="input" type="number" required>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Cách dùng</label>
+      <div class="control">
+        <div class="select">
+          <select id="modify-modal-user-manual" name="unit" required>
+            {{#each userManuals}}
+            <option>{{this.description}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="field is-grouped">
+      <div class="control">
+        <button id="modify-modal-confirm" class="button is-link" type="button">Cập nhập</button>
+      </div>
+      <div class="control">
+        <button id="modify-modal-close" class="button is-link is-light" type="button">Hủy bỏ</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script>
+  const TABLE_COLUMNS = [
+    { title: "id", field: "id", visible: false },
+    { title: "STT", field: "STT", formatter: "rownum", width: 100 },
+    { title: "Tên", field: "name", sorter: "string" },
+    { title: "Đơn vị", field: "unit", sorter: "string" },
+    {
+      title: "Giá", field: "price", sorter: "number", width: 150, formatter: "money", formatterParams: {
+        decimal: ",",
+        thousand: ".",
+        symbol: "đ",
+        symbolAfter: "p",
+        precision: false,
+      }
+    },
+    { title: "Cách dùng", field: "userManual", sorter: "string" },
+  ];
+
+  const DATA_URL = "/api/fake/medicine";
+
+  const formModal = $("#modify-modal");
+  const nameModifyModalInput = $("#modify-modal-name");
+  const unitModifyModalInput = $("#modify-modal-unit");
+  const priceModifyModalInput = $("#modify-modal-price");
+  const userManualModifyModalInput = $("#modify-modal-user-manual");
+
+  const onCreateButtonClicked = () => { formModal.classList.add("is-active"); }
+  const onConfirmModalConfirmButtonClicked =
+    table => table.deleteRow(table.getSelectedData().map(function (r) { return r.id; }));
+
+  const onModifyButtonClicked = row => {
+    nameModifyModalInput.value = row.name;
+    unitModifyModalInput.value = row.unit;
+    priceModifyModalInput.value = row.price;
+    userManualModifyModalInput.value = row.userManual;
+  };
+
+  $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active"); };
+
+  $("#modify-modal-confirm").onclick = function (e) {
+    e.preventDefault();
+
+    const name = nameModifyModalInput.value;
+    const unit = unitModifyModalInput.value;
+    const price = parseInt(priceModifyModalInput.value) || -1;
+    const userManual = userManualModifyModalInput.value;
+    let hasError = false;
+
+    const obj = { name, unit, price, userManual };
+
+    if (name.length === 0) {
+      nameModifyModalInput.classList.add("is-danger");
+      hasError = true;
+    }
+    if (price < 0) {
+      priceModifyModalInput.classList.add("is-danger");
+      hasError = true;
+    }
+    if (hasError) {
+      return;
+    }
+
+
+    if (isCreate) {
+      table.addData([{ id: Math.round(Math.random() * 10000), ...obj }], true);
+    } else {
+      table.updateData([{ id: table.getSelectedData()[0].id, ...obj }]);
+    }
+
+    formModal.classList.remove("is-active");
+    table.deselectRow();
+  };
+
+</script>
+
+{{> table-script}}
+<script>
+    async function load() { 
+    console.log(DATA_URL)
+    table.setData(DATA_URL);
+
+  };
+
+</script>

@@ -1,0 +1,79 @@
+{{> table}}
+
+<form id="modify-modal" class="modal">
+  <div class="modal-background"></div>
+
+  <div class="modal-content box">
+    <div class="field">
+      <label class="label">Tên</label>
+      <div class="control">
+        <input id="modify-modal-name" name="name" class="input" type="text" required>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Giới tính</label>
+      <div class="control">
+        <div class="select">
+          <select id="modify-modal-gender" name="gender" required>
+            <option>Nam</option>
+            <option>Nữ</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Năm sinh</label>
+      <div class="control">
+        <input id="modify-modal-year-of-birth" , name="yearOfBirth" class="input" type="number" required>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Địa chỉ</label>
+      <div class="control">
+        <input id="modify-modal-address" name="address" class="input" type="text">
+      </div>
+    </div>
+
+    <div class="field is-grouped">
+      <div class="control">
+        <button id="modify-modal-confirm" class="button is-link" type="button">Cập nhập</button>
+      </div>
+      <div class="control">
+        <button id="modify-modal-close" class="button is-link is-light" type="button">Hủy bỏ</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script>
+  const TABLE_COLUMNS = [
+    { title: "id", field: "id", visible: false },
+    { title: "STT", field: "STT", formatter: "rownum", width: 100 },
+    { title: "Tên bênh nhân", field: "patient", sorter: "string" }, // use link formatter
+    { title: "Triệu chứng", field: "symptoms", sorter: "string" },
+    { title: "Ngày khám", field: "date", sorter: "string" },
+    { title: "Bệnh", field: "diseases", sorter: "string" },
+    { title: "Thuốc", field: "medicines", sorter: "string" },
+  ];
+
+  const DATA_URL = "/api/fake/patient";
+
+  const onCreateButtonClicked = () => { formModal.classList.add("is-active"); }
+  const onConfirmModalConfirmButtonClicked =
+    table => table.deleteRow(table.getSelectedData().map(function (r) { return r.id; }));
+
+  const onModifyButtonClicked = row => {
+  };
+
+  $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active"); };
+  $("#modify-modal-confirm").onclick = function (e) {
+    e.preventDefault();
+    formModal.classList.remove("is-active");
+    table.deselectRow();
+  }
+</script>
+
+{{> table-script}}
