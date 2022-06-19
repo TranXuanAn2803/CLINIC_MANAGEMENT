@@ -13,7 +13,7 @@
 
     <div class="field is-grouped">
       <div class="control">
-        <button id="modify-modal-confirm" class="button is-link" type="button">Cập nhập</button>
+        <button id="modify-modal-confirm" class="button is-link" type="submit">Cập nhập</button>
       </div>
       <div class="control">
         <button id="modify-modal-close" class="button is-link is-light" type="button">Hủy bỏ</button>
@@ -35,28 +35,83 @@
   const descriptionModifyModalInput = $("#modify-modal-description");
 
   const onCreateButtonClicked = () => { formModal.classList.add("is-active"); }
-  const onConfirmModalConfirmButtonClicked =
-    table => table.deleteRow(table.getSelectedData().map(function (r) { return r.id; }));
-
+  const onConfirmModalConfirmButtonClicked =(table)=>
+  {
+    fetch('/unit/delete', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          
+          body: JSON.stringify(table.getSelectedData()),
+          })
+          .then(response => {
+            response.json()
+          })
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch((error) => {
+          console.error('Error:', error);
+        });
+    table.deleteRow(table.getSelectedData().map(function (r) { return r.id; }));
+  }
   const onModifyButtonClicked = row => {
-    descriptionModifyModalInput.value = row.description;
+    descriptionModifyModalInput.value = row.type;
   };
 
   $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active"); };
   $("#modify-modal-confirm").onclick = function (e) {
     e.preventDefault();
 
-    const description = descriptionModifyModalInput.value;
+    const type = descriptionModifyModalInput.value;
 
-    if (description.length === 0) {
+    if (type.length === 0) {
       descriptionModifyModalInput.classList.add("is-danger");
       return;
     }
-
+    const unit={
+      type:type,
+    }
     if (isCreate) {
-      table.addData([{ id: Math.round(Math.random() * 10000), description }], true);
+      table.addData([{ id: Math.round(Math.random() * 10000), type }], true);
+      fetch('/unit/add', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(unit),
+          })
+          .then(response => {
+            response.json()
+          })
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch((error) => {
+          console.error('Error:', error);
+        });
+        formModal.reset()
+        table.setData(DATA_URL);
     } else {
-      table.updateData([{ id: table.getSelectedData()[0].id, description }]);
+      unit.id=table.getSelectedData()[0].id
+      table.updateData([{ id: table.getSelectedData()[0].id, type }]);
+      fetch('/unit/edit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(unit),
+          })
+          .then(response => {
+            response.json()
+          })
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch((error) => {
+          console.error('Error:', error);
+        });
     }
 
     formModal.classList.remove("is-active");

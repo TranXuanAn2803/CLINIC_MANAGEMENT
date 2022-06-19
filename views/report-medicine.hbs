@@ -1,12 +1,7 @@
 <div class="m-2">
-  <div class="select">
-    <select>
-      <option>Chọn Tháng</option>
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-    </select>
-  </div>
+  <label for="bday-month">Tháng</label>
+  <input id="bday-month" type="month" name="bday-month">
+
 </div>
 <div id="table"></div>
 
@@ -27,5 +22,26 @@
     placeholder: "Không có dữ liệu",
     columns: TABLE_COLUMNS,
   });
+$("#bday-month").onchange= function() {
+    const date={
+      date: this.value
+    }
+    fetch('/report/medicine', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(date),
+          })
+          .then(response => {
+            table.setData(response.json());
+          })
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch((error) => {
+          console.error('Error:', error);
+        });
+  }
 
 </script>

@@ -6,13 +6,17 @@
   <div class="modal-content box">
     <div class="field">
       <label class="label">Tên</label>
-      <div class="control">
-        <input id="modify-modal-name" name="name" class="input" type="text" required>
-      </div>
+        <div class="select">
+          <select id="modify-modal-unit" name="unit" required>
+            {{#each patient}}
+              <option value={{this.id}}>{{this.name}}</option>
+            {{/each}}
+          </select>
+        </div>    
     </div>
 
     <div class="field">
-      <label class="label">Giới tính</label>
+      <label class="label">Date</label>
       <div class="control">
         <div class="select">
           <select id="modify-modal-gender" name="gender" required>
@@ -59,7 +63,7 @@
     { title: "Thuốc", field: "medicines", sorter: "string" },
   ];
 
-  const DATA_URL = "/api/fake/patient";
+  const DATA_URL = "/api/fake/checkup";
 
   const onCreateButtonClicked = () => { formModal.classList.add("is-active"); }
   const onConfirmModalConfirmButtonClicked =

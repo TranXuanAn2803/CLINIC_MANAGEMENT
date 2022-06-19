@@ -1,50 +1,47 @@
+const { use } = require('passport');
 const apiUsermanual = require('../models/api/usermanual');
 
 const view = (_, res) => {
-  res.render('usermanual', { title: 'Hướng Dẫn Sử Dụng' });
+    res.render('usermanual', { title: 'Hướng Dẫn Sử Dụng' });
 };
-const addUsermanual = async (req, res) => {
-  const usermanual = {
-    description: '1 ngay 1 vien'
-  };
-  try {
-    await apiUsermanual.addUsermanual(usermanual);
-  } catch (err) {
-    return false;
-  }
-  const p = await apiUsermanual.listUsermanual();
-  console.log(p);
-  return true;
-};
-const editUsermanual = async (req, res) => {
-  const usermanual = {
-    id: 2,
-    description: '1 ngay 2 vien'
-  };
+const listUsermanual = async() => {
 
-  try {
-    await apiUsermanual.updateUsermanual(usermanual);
-  } catch (err) {
-    return false;
-  }
-  const p = await apiUsermanual.listUsermanual();
-  console.log(p);
-  return true;
+    const userManual = await apiUsermanual.listUsermanual();
+    return userManual
+
+}
+
+const addUsermanual = async(req, res) => {
+    const usermanual = req.body;
+    try {
+        await apiUsermanual.addUsermanual(usermanual);
+    } catch (err) {
+        console.log(err)
+    }
 };
-const deleteUsermanual = async (req, res) => {
-  const id = 1;
-  try {
-    await apiUsermanual.deleteUsermanual(id);
-  } catch (err) {
-    return false;
-  }
-  const p = await apiUsermanual.listUsermanual();
-  console.log(p);
-  return true;
+const editUsermanual = async(req, res) => {
+    const usermanual = req.body
+
+    try {
+        await apiUsermanual.updateUsermanual(usermanual);
+    } catch (err) {
+        console.log(err);
+    }
+};
+const deleteUsermanual = async(req, res) => {
+    const userManual = req.body;
+    for (const u of userManual) {
+        try {
+            await apiUsermanual.deleteUsermanual(u.id);
+        } catch (err) {
+            console.log(err);
+        }
+    }
 };
 module.exports = {
-  view,
-  addUsermanual,
-  editUsermanual,
-  deleteUsermanual
+    view,
+    listUsermanual,
+    addUsermanual,
+    editUsermanual,
+    deleteUsermanual
 };

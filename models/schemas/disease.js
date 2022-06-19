@@ -8,7 +8,7 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false,
             primaryKey: true
         },
-        desciption: {
+        description: {
             type: DataTypes.TEXT,
             allowNull: true
         },

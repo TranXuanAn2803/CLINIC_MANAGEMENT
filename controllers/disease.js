@@ -1,50 +1,46 @@
-const apiDisease = require('../models/api/disease');
+const apiDisease = require("../models/api/disease");
 
 const view = (_, res) => {
-  res.render('disease', { title: 'Bệnh' });
+    res.render('disease', { title: 'Bệnh' });
 };
-const addDisease = async (req, res) => {
-  const disease = {
-    desciption: 'cam'
-  };
-  try {
-    await apiDisease.addDisease(disease);
-  } catch (err) {
-    return false;
-  }
-  const p = await apiDisease.listDisease();
-  console.log(p);
-  return true;
-};
-const editDisease = async (req, res) => {
-  const disease = {
-    id: 1,
-    desciption: 'viem hong'
-  };
+const listDisease = async(req, res) => {
+    const disease = await apiDisease.listDisease();
 
-  try {
-    await apiDisease.updateDisease(disease);
-  } catch (err) {
-    return false;
-  }
-  const p = await apiDisease.listDisease();
-  console.log(p);
-  return true;
+    return disease;
 };
-const deleteDisease = async (req, res) => {
-  const id = 1;
-  try {
-    await apiDisease.deleteDisease(id);
-  } catch (err) {
-    return false;
-  }
-  const p = await apiDisease.listDisease();
-  console.log(p);
-  return true;
+const addDisease = async(req, res) => {
+    const disease = req.body;
+    try {
+        await apiDisease.addDisease(disease);
+    } catch (err) {
+        console.log(err);
+    }
 };
+const editDisease = async(req, res) => {
+    const disease = req.body
+    try {
+        await apiDisease.updateDisease(disease);
+    } catch (err) {
+        console.log(err);
+    }
+
+};
+const deleteDisease = async(req, res) => {
+    const disease = req.body;
+    for (const d of disease) {
+        console.log(d)
+        try {
+            await apiDisease.deleteDisease(d.id);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+};
+
 module.exports = {
-  view,
-  addDisease,
-  editDisease,
-  deleteDisease
+    view,
+    addDisease,
+    editDisease,
+    deleteDisease,
+    listDisease
 };
