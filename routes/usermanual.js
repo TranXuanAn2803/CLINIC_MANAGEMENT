@@ -1,8 +1,9 @@
 const router = require('express').Router();
-const controller = require('../controllers/medicine');
+const controller = require('../controllers/usermanual');
 
 router.get('/', (req, res) => {
     if (req.session.user != undefined) {
+
         controller.view(req, res)
 
     } else {
@@ -10,9 +11,8 @@ router.get('/', (req, res) => {
     }
 
 });
-router.post('/add', controller.addMedicine);
-router.post('/edit', controller.editMedicine);
-
-router.post('/delete', controller.deleteMedicine);
+router.post('/add', controller.addUsermanual);
+router.post('/edit', controller.editUsermanual);
+router.post('/delete', controller.deleteUsermanual);
 
 module.exports = router;

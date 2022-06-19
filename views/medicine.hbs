@@ -1,4 +1,4 @@
-{{> table}}
+{{> table-modifiers}}
 
 <form id="modify-modal" class="modal">
   <div class="modal-background"></div>
@@ -17,7 +17,7 @@
         <div class="select">
           <select id="modify-modal-unit" name="unit" required>
             {{#each units}}
-            <option>{{this.type}}</option>
+              <option value={{this.id}}>{{this.type}}</option>
             {{/each}}
           </select>
         </div>
@@ -37,7 +37,7 @@
         <div class="select">
           <select id="modify-modal-user-manual" name="unit" required>
             {{#each userManuals}}
-            <option>{{this.description}}</option>
+              <option value={{this.id}}>{{this.description}}</option>
             {{/each}}
           </select>
         </div>
@@ -82,14 +82,38 @@
   const userManualModifyModalInput = $("#modify-modal-user-manual");
 
   const onCreateButtonClicked = () => { formModal.classList.add("is-active"); }
-  const onConfirmModalConfirmButtonClicked =
-    table => table.deleteRow(table.getSelectedData().map(function (r) { return r.id; }));
+  const onConfirmModalConfirmButtonClicked =(table)=>
+  { 
+    fetch('/medicine/delete', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          
+          body: JSON.stringify(table.getSelectedData()),
+          })
+          .then(response => {
+            response.json()
+          })
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch((error) => {
+          console.error('Error:', error);
+        });
 
-  const onModifyButtonClicked = row => {
+    table.deleteRow(
+      table.getSelectedData().map(function (r) { 
+        return r.id; })
+    );
+
+  } 
+   const onModifyButtonClicked = row => {
     nameModifyModalInput.value = row.name;
     unitModifyModalInput.value = row.unit;
     priceModifyModalInput.value = row.price;
     userManualModifyModalInput.value = row.userManual;
+
   };
 
   $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active"); };
@@ -103,7 +127,8 @@
     const userManual = userManualModifyModalInput.value;
     let hasError = false;
 
-    const obj = { name, unit, price, userManual };
+    const obj = { 
+      name, unit:unitModifyModalInput.text, price, userManual: userManualModifyModalInput.text};
 
     if (name.length === 0) {
       nameModifyModalInput.classList.add("is-danger");
@@ -113,29 +138,73 @@
       priceModifyModalInput.classList.add("is-danger");
       hasError = true;
     }
+    if (unit.length === 0) {
+      unitModifyModalInput.classList.add("is-danger");
+      hasError = true;
+    }
+    if (userManual.length === 0) {
+      userManualModifyModalInput.classList.add("is-danger");
+      hasError = true;
+    }
+
     if (hasError) {
       return;
     }
 
-
+    const medicine={
+      name: name,
+      unit: unit,
+      price: price,
+      usermanual: userManual
+    }
     if (isCreate) {
       table.addData([{ id: Math.round(Math.random() * 10000), ...obj }], true);
+      fetch('/medicine/add', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(medicine),
+          })
+          .then(response => {
+            response.json()
+          })
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch((error) => {
+          console.error('Error:', error);
+        });
+        table.setData(DATA_URL);
+        formModal.reset()
+        
     } else {
+      medicine.id=table.getSelectedData()[0].id
       table.updateData([{ id: table.getSelectedData()[0].id, ...obj }]);
+      fetch('/medicine/edit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(medicine),
+          })
+          .then(response => {
+            response.json()
+          })
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch((error) => {
+          console.error('Error:', error);
+        });
+      table.setData(DATA_URL);
+
     }
 
     formModal.classList.remove("is-active");
     table.deselectRow();
+    
   };
-
 </script>
 
-{{> table-script}}
-<script>
-    async function load() { 
-    console.log(DATA_URL)
-    table.setData(DATA_URL);
-
-  };
-
-</script>
+{{> table-modifiers-script}}

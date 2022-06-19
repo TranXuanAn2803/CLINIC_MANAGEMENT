@@ -1,85 +1,36 @@
-const { models } = require("../../config/DBconnect");
-const { QueryTypes } = require("sequelize");
-const sequelize = require("sequelize");
-const Op = sequelize.Op;
+const { models } = require('../../config/DBconnect');
+const { Op } = require('sequelize');
 
-const listPatient = () => {
-    return models.patient.findAll({
+const listPatient = () => models.patient.findAll({ order: [
+        ['id', 'ASC']
+    ] });
+
+const findPatient = (startdate, enddate) =>
+    models.patient.findAll({
         order: [
-            ['id', 'ASC'],
-        ],
-    });
-};
-const findPatient = (startdate, enddate) => {
-    return models.patient.findAll({
-        order: [
-            ['id', 'ASC'],
+            ['id', 'ASC']
         ],
         include: [{
             model: models.checkup,
             required: true,
             as: 'checkups',
-            where: {
-                date: {
-                    [Op.gte]: startdate,
-                    [Op.lte]: enddate,
-
-                }
-            },
-
-        }, ],
+            where: { date: {
+                    [Op.gte]: startdate, [Op.lte]: enddate } }
+        }],
         raw: true,
         nest: true
-
-
     });
 
-}
-const addPatient = async(patient) => {
-    try {
-        await models.patient.create({
-            name: patient.name,
-            gender: patient.gender,
-            yearOfBirth: patient.yearOfBirth,
-            address: patient.address
-
-        });
-    } catch (err) {
-        console.log(err.message)
-        throw (err)
-    }
+const addPatient = async({ name, gender, yearOfBirth, address }) => {
+    return await models.patient.create({ name, gender, yearOfBirth, address });
 };
-const updatePatient = async(patient) => {
-    try {
-        await models.patient.update({
-            name: patient.name,
-            gender: patient.gender,
-            yearOfBirth: patient.yearOfBirth,
-            address: patient.address
-        }, {
-            where: {
-                id: patient.id
-            }
-        });
-    } catch (err) {
-        console.log(err.message)
-        throw (err)
-    }
-};
-const deletePatient = async(id) => {
 
-
-    try {
-        await models.patient.destroy({
-            where: {
-                id: id
-            }
-        });
-    } catch (err) {
-        console.log(err.message)
-        throw (err)
-    }
+const updatePatient = async({ id, name, gender, yearOfBirth, address }) => {
+    await models.patient.update({ name, gender, yearOfBirth, address }, { where: { id } });
 };
+
+const deletePatient = async(id) => { await models.patient.destroy({ where: { id } }); };
+
 module.exports = {
     listPatient,
     addPatient,

@@ -1,14 +1,13 @@
 {{> table-modifiers}}
 
-<form id="modify-modal" class="modal" form action="/disease/add" method="post">
-
+<form id="modify-modal" class="modal">
   <div class="modal-background"></div>
 
   <div class="modal-content box">
     <div class="field">
-      <label class="label">Triệu chứng</label>
+      <label class="label">Đơn vị</label>
       <div class="control">
-        <input id="modify-modal-description" name="description" class="input" type="text" required>
+        <input id="modify-modal-description" name="type" class="input" type="text" required>
       </div>
     </div>
 
@@ -27,10 +26,10 @@
   const TABLE_COLUMNS = [
     { title: "id", field: "id", visible: false },
     { title: "STT", field: "STT", formatter: "rownum", width: 100 },
-    { title: "Triệu chứng", field: "description", sorter: "string" },
+    { title: "Đơn vị", field: "type", sorter: "string" },
   ];
 
-  const DATA_URL = "/api/fake/disease";
+  const DATA_URL = "/api/fake/unit";
 
   const formModal = $("#modify-modal");
   const descriptionModifyModalInput = $("#modify-modal-description");
@@ -38,7 +37,7 @@
   const onCreateButtonClicked = () => { formModal.classList.add("is-active"); }
   const onConfirmModalConfirmButtonClicked =(table)=>
   {
-    fetch('/disease/delete', {
+    fetch('/unit/delete', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -58,30 +57,30 @@
     table.deleteRow(table.getSelectedData().map(function (r) { return r.id; }));
   }
   const onModifyButtonClicked = row => {
-    descriptionModifyModalInput.value = row.description;
+    descriptionModifyModalInput.value = row.type;
   };
 
   $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active"); };
   $("#modify-modal-confirm").onclick = function (e) {
     e.preventDefault();
 
-    const description = descriptionModifyModalInput.value;
+    const type = descriptionModifyModalInput.value;
 
-    if (description.length === 0) {
+    if (type.length === 0) {
       descriptionModifyModalInput.classList.add("is-danger");
       return;
     }
-    const disease={
-      description: description,
+    const unit={
+      type:type,
     }
     if (isCreate) {
-      table.addData([{ id: Math.round(Math.random() * 10000), description }], true);
-      fetch('/disease/add', {
+      table.addData([{ id: Math.round(Math.random() * 10000), type }], true);
+      fetch('/unit/add', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(disease),
+          body: JSON.stringify(unit),
           })
           .then(response => {
             response.json()
@@ -93,16 +92,16 @@
           console.error('Error:', error);
         });
         formModal.reset()
-        table.setData(DATA_URL);  
+        table.setData(DATA_URL);
     } else {
-      disease.id=table.getSelectedData()[0].id
-      table.updateData([{ id: table.getSelectedData()[0].id, description }]);
-      fetch('/disease/edit', {
+      unit.id=table.getSelectedData()[0].id
+      table.updateData([{ id: table.getSelectedData()[0].id, type }]);
+      fetch('/unit/edit', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(disease),
+          body: JSON.stringify(unit),
           })
           .then(response => {
             response.json()

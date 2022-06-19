@@ -1,0 +1,46 @@
+<div class="m-2">
+  <label for="bday-month">Tháng</label>
+  <input id="bday-month" type="month" name="bday-month">
+
+</div>
+<div id="table"></div>
+
+<script>
+  const TABLE_COLUMNS = [
+    { title: "id", field: "id", visible: false },
+    { title: "STT", field: "STT", formatter: "rownum", width: 100 },
+    { title: "Đơn vị tính", field: "unit", sorter: "string" },
+    { title: "Số lượng", field: "number", sorter: "number" },
+    { title: "Số lần dùng", field: "useTime", sorter: "number" },
+  ];
+  const table = new Tabulator("#table", {
+    layout: "fitColumns",
+    selectable: true,
+    height: "88vh",
+    selectableRangeMode: "click",
+    placeholder: "Không có dữ liệu",
+    columns: TABLE_COLUMNS,
+  });
+$("#bday-month").onchange= function() {
+    const date={
+      date: this.value
+    }
+    fetch('/report/medicine', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(date),
+          })
+          .then(response => {
+            table.setData(response.json());
+          })
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch((error) => {
+          console.error('Error:', error);
+        });
+  }
+
+</script>

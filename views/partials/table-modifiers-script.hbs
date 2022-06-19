@@ -7,9 +7,8 @@
     placeholder: "Không có dữ liệu",
     columns: TABLE_COLUMNS,
   });
-  $("#load-data-button").onclick = function () { 
-    table.setData(DATA_URL); };
 
+  $("#load-data-button").onclick = function () { table.setData(DATA_URL); };
   $("#select-all-button").onclick = function () { table.selectRow(); };
   $("#deselect-all-button").onclick = function () { table.deselectRow(); }
 

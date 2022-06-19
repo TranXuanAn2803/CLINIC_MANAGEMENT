@@ -1,5 +1,5 @@
 const { Sequelize } = require('sequelize');
-const initModels = require("../models/schemas/init-models");
+const initModels = require('../models/schemas/init-models');
 
 const sequelize = new Sequelize(
     process.env.DATABASE_NAME,
@@ -10,14 +10,10 @@ const sequelize = new Sequelize(
         logging: false,
         query: { raw: true },
         timezone: '+07:00',
-        dialectOptions: {
-            ssl: {
-                require: true,
-                rejectUnauthorized: false
-            }
-        },
+        dialectOptions: { ssl: { require: true, rejectUnauthorized: false } }
+    }
+);
 
-    });
 const DBconnect = async() => {
     try {
         await sequelize.authenticate();
@@ -29,5 +25,5 @@ const DBconnect = async() => {
 module.exports = {
     DBconnect,
     sequelize,
-    models: initModels(sequelize),
+    models: initModels(sequelize)
 };

@@ -1,15 +1,21 @@
 const passport = require('../config/passport');
 
-const login = passport.authenticate('local', {
-    successRedirect: '',
-    failureRedirect: ''
-});
+const view = (_, res) => {
+    res.render('login', { title: 'Đăng Nhập' });
+};
+
+
+const isAuthenticated = (req, res) => {
+    if (req.user) {
+        return true;
+    }
+    return false;
+};
 
 const logout = (req, res) => {};
 
-
-
 module.exports = {
-    login,
+    view,
     logout,
+    isAuthenticated
 };

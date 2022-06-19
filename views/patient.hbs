@@ -1,4 +1,4 @@
-{{> table}}
+{{> table-modifiers}}
 
 <form id="modify-modal" class="modal">
   <div class="modal-background"></div>
@@ -39,7 +39,7 @@
 
     <div class="field is-grouped">
       <div class="control">
-        <button id="modify-modal-confirm" class="button is-link" type="button">Cập nhập</button>
+        <button id="modify-modal-confirm" class="button is-link">Cập nhập</button>
       </div>
       <div class="control">
         <button id="modify-modal-close" class="button is-link is-light" type="button">Hủy bỏ</button>
@@ -47,7 +47,6 @@
     </div>
   </div>
 </form>
-
 <script>
   const TABLE_COLUMNS = [
     { title: "id", field: "id", visible: false },
@@ -67,9 +66,28 @@
   const addressModifyModalInput = $("#modify-modal-address");
 
   const onCreateButtonClicked = () => { formModal.classList.add("is-active"); }
-  const onConfirmModalConfirmButtonClicked =
-    table => table.deleteRow(table.getSelectedData().map(function (r) { return r.id; }));
-
+  const onConfirmModalConfirmButtonClicked =(table)=>
+  { 
+    fetch('/patient/delete', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(table.getSelectedData()),
+          })
+          .then(response => {
+            response.json()
+          })
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch((error) => {
+          console.error('Error:', error);
+        });
+    table.deleteRow(
+      table.getSelectedData().map(function (r) { return r.id; })
+    );
+  }
   const onModifyButtonClicked = row => {
     nameModifyModalInput.value = row.name;
     yearOfBirthModifyModalInput.value = row.yearOfBirth;
@@ -78,44 +96,77 @@
 
   $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active"); };
   $("#modify-modal-confirm").onclick = function (e) {
-    e.preventDefault();
-
     const name = nameModifyModalInput.value;
     const gender = genderModifyModalInput.value;
     const yearOfBirth = yearOfBirthModifyModalInput.value;
     const address = addressModifyModalInput.value;
     const hasError = false;
+      const patient={
+        name: name,
+        gender: gender,
+        yearOfBirth: yearOfBirth,
+        address: address,
+      }
 
     if (name.length === 0) {
       nameModifyModalInput.classList.add("is-danger");
       hasError = true;
     }
-    if (address.length === 0) {
+    if (yearOfBirth.length === 0) {
       addressModifyModalInput.classList.add("is-danger");
       hasError = true;
     }
+    
     if (hasError) {
       return;
     }
 
     if (isCreate) {
       table.addData([{ id: Math.round(Math.random() * 10000), name, gender, yearOfBirth, address }], true);
+      fetch('/patient/add', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(patient),
+          })
+          .then(response => {
+            response.json()
+          })
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch((error) => {
+          console.error('Error:', error);
+        });
+        table.setData(DATA_URL);
     } else {
       table.updateData([{ id: table.getSelectedData()[0].id, name, gender, yearOfBirth, address }]);
+      patient.id=table.getSelectedData()[0].id
+      fetch('/patient/edit/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        
+        body: JSON.stringify(patient),
+
+        })
+        .then(response => {
+          response.json()
+        })
+        .then(data => {
+          console.log('Success:', data);
+        })
+        .catch((error) => {
+        console.error('Error:', error);
+      });
     }
 
     formModal.classList.remove("is-active");
     table.deselectRow();
+    formModal.reset()
   }
-
 </script>
 
-{{> table-script}}
-<script>
-    async function load() { 
-    console.log(DATA_URL)
-    table.setData(DATA_URL);
-
-  };
-
-</script>
+{{> table-modifiers-script}}

@@ -12,68 +12,57 @@ const listPatient = async() => {
 
 }
 const findPatient = async(req, res) => {
-    const startdate = moment("2022-1-1", "YYYY-MM-DD");
+    const startdate = moment('2022-1-1', 'YYYY-MM-DD');
 
-    const enddate = moment("2022-1-31", "YYYY-MM-DD")
-    let pt = null
+    const enddate = moment('2022-1-31', 'YYYY-MM-DD');
+    let pt = null;
     try {
         pt = await apiPatient.findPatient(startdate, enddate);
-
-
     } catch (err) {
-        console.log(err)
+        console.log(err);
         return false;
     }
-    for (var p of pt) {
-        var stringDisease = ""
-        var disease = await apiCheckup.findDisease(p.checkups.id)
+    for (const p of pt) {
+        let stringDisease = '';
+        const disease = await apiCheckup.findDisease(p.checkups.id);
 
-        for (var d of disease) {
-            stringDisease = stringDisease + (d.iddisease_disease.description) + " "
+        for (const d of disease) {
+            stringDisease = stringDisease + (d.iddisease_disease.desciption) + ' ';
         }
-        p.disease = stringDisease
-
+        p.disease = stringDisease;
     }
-    console.log(pt)
+    console.log(pt);
     return true;
 };
 
 const addPatient = async(req, res) => {
-
-    const user = req.body
+    const patient = req.body;
     try {
-        await apiPatient.addPatient(user);
-
+        p = await apiPatient.addPatient(patient);
     } catch (err) {
-        return false;
+        console.log(err);
+
     }
-    const p = await apiPatient.listPatient();
-    console.log(p);
-    return true;
+
 };
 const editPatient = async(req, res) => {
-    const user = req.body
+    const patient = req.body;
     try {
-        await apiPatient.updatePatient(user);
-
+        await apiPatient.updatePatient(patient);
     } catch (err) {
-        return false;
+        console.log(err);
     }
-    const p = await apiPatient.listPatient();
-    console.log(p);
-    return true;
 };
 const deletePatient = async(req, res) => {
-    const id = 1
-    try {
-        await apiPatient.deletePatient(id);
-
-    } catch (err) {
-        return false;
+    const patient = req.body;
+    for (const p of patient) {
+        try {
+            await apiPatient.deletePatient(p.id);
+        } catch (err) {
+            console.log(err);
+        }
     }
-    const p = await apiPatient.listPatient();
-    console.log(p);
-    return true;
+
 };
 module.exports = {
     listPatient,

@@ -4,6 +4,7 @@ const controllerMedicine = require('../controllers/medicine');
 const controllerDisease = require('../controllers/disease');
 const controllerUnit = require('../controllers/unit');
 const controllerUsermanual = require('../controllers/usermanual');
+const controllerCheckup = require('../controllers/checkup');
 
 const faker = require('@faker-js/faker/locale/vi');
 const async = require('hbs/lib/async');
@@ -59,7 +60,6 @@ router.get('/patient', async(_, res) => {
 
 router.get('/medicine', async(_, res) => {
     const medicine = await controllerMedicine.listMedicine()
-    console.log(medicine)
     res.send(medicine);
 });
 
@@ -69,11 +69,11 @@ router.get('/disease', async(_, res) => {
 });
 
 router.get('/unit', async(_, res) => {
-    const unit = await controllerUnit.listUnit()
+    const unit = await controllerUnit.listDisease()
     res.send(unit);
 });
 
-router.get('/user-manual', async(_, res) => {
+router.get('/usermanual', async(_, res) => {
     const usermanual = await controllerUsermanual.listUsermanual()
     res.send(usermanual);
 });

@@ -1,59 +1,47 @@
-const apiUsermanual = require("../models/api/usermanual");
+const { use } = require('passport');
+const apiUsermanual = require('../models/api/usermanual');
 
 const view = (_, res) => {
-    res.render('usermanual', { title: 'Xem bệnh nhân' });
+    res.render('usermanual', { title: 'Hướng Dẫn Sử Dụng' });
 };
-const listUsermanual = async(req, res) => {
-    const usermanual = await apiUsermanual.listUsermanual();
-    return usermanual;
-};
+const listUsermanual = async() => {
+
+    const userManual = await apiUsermanual.listUsermanual();
+    return userManual
+
+}
 
 const addUsermanual = async(req, res) => {
-    const usermanual = {
-        description: "1 ngay 1 vien"
-    }
+    const usermanual = req.body;
     try {
         await apiUsermanual.addUsermanual(usermanual);
-
     } catch (err) {
-        return false;
+        console.log(err)
     }
-    const p = await apiUsermanual.listUsermanual();
-    console.log(p);
-    return true;
 };
 const editUsermanual = async(req, res) => {
-    const usermanual = {
-        id: 2,
-        description: "1 ngay 2 vien"
-    }
+    const usermanual = req.body
 
     try {
         await apiUsermanual.updateUsermanual(usermanual);
-
     } catch (err) {
-        return false;
+        console.log(err);
     }
-    const p = await apiUsermanual.listUsermanual();
-    console.log(p);
-    return true;
 };
 const deleteUsermanual = async(req, res) => {
-    const id = 1
-    try {
-        await apiUsermanual.deleteUsermanual(id);
-
-    } catch (err) {
-        return false;
+    const userManual = req.body;
+    for (const u of userManual) {
+        try {
+            await apiUsermanual.deleteUsermanual(u.id);
+        } catch (err) {
+            console.log(err);
+        }
     }
-    const p = await apiUsermanual.listUsermanual();
-    console.log(p);
-    return true;
 };
 module.exports = {
     view,
+    listUsermanual,
     addUsermanual,
     editUsermanual,
-    deleteUsermanual,
-    listUsermanual
+    deleteUsermanual
 };
