@@ -2,8 +2,13 @@ const router = require('express').Router();
 const controllerPatient = require('../controllers/patient');
 const controllerMedicine = require('../controllers/medicine');
 const controllerDisease = require('../controllers/disease');
-const controllerUnit = require('../controllers/unit');
 const controllerUsermanual = require('../controllers/usermanual');
+const apiCheckup = require('../models/api/checkup');
+
+router.get('/checkup', async (_, res) => {
+  const checkups = await apiCheckup.listCheckUp();
+  res.send(checkups);
+});
 
 router.get('/patient', async (_, res) => {
   const patient = await controllerPatient.listPatient();

@@ -5,35 +5,29 @@
 
   <div class="modal-content box">
     <div class="field">
-      <label class="label">Tên</label>
-      <div class="control">
-        <input id="modify-modal-name" name="name" class="input" type="text">
-      </div>
-    </div>
-
-    <div class="field">
-      <label class="label">Date</label>
+      <label class="label">Bệnh nhân</label>
       <div class="control">
         <div class="select">
-          <select id="modify-modal-gender" name="gender" required>
-            <option>Nam</option>
-            <option>Nữ</option>
+          <select id="modify-modal-patient" name="patient" required>
+            {{#each patients}}
+              <option value={{this.id}}>{{this.id}} - {{this.name}}</option>
+            {{/each}}
           </select>
         </div>
       </div>
     </div>
 
     <div class="field">
-      <label class="label">Năm sinh</label>
+      <label class="label">Ngày khám</label>
       <div class="control">
-        <input id="modify-modal-year-of-birth" , name="yearOfBirth" class="input" type="number" required>
+        <input id="modify-modal-date" , name="date" class="input" type="date" required>
       </div>
     </div>
 
     <div class="field">
-      <label class="label">Địa chỉ</label>
+      <label class="label">Triệu chứng</label>
       <div class="control">
-        <input id="modify-modal-address" name="address" class="input" type="text">
+        <textarea id="modify-modal-symptoms" name="symptoms" class="textarea" type="textarea"></textarea>
       </div>
     </div>
 
@@ -67,6 +61,7 @@
     table => table.deleteRow(table.getSelectedData().map(function (r) { return r.id; }));
 
   const onModifyButtonClicked = row => {
+    window.location.href = `http://${window.location.host}/checkup/edit/${row.id}`;
   };
 
   $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active"); };

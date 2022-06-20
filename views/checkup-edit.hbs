@@ -1,0 +1,259 @@
+<div class="columns m-2">
+  <div class="column">Tên: <span class="has-text-weight-semibold">{{ checkup.patient_patient.name }}</span></div>
+  <div class="column">Ngày khám: <span class="has-text-weight-semibold">{{ checkup.date }}</span></div>
+  <div class="column">Triệu chứng: <span class="has-text-weight-semibold">{{ checkup.symptoms }}</span></div>
+</div>
+
+
+<div class="m-2">
+  <button class="button" id="load-data-button">Tải dữ liệu</button>
+  <button class="button" id="select-all-button">Chọn tất cả</button>
+  <button class="button" id="deselect-all-button">Bỏ chọn tất cả</button>
+  <button class="button is-primary" id="create-button">Thêm</button>
+  <button class="button is-info" id="modify-button" disabled>Cập nhật</button>
+  <button class="button is-danger" id="delete-button">Xóa</button>
+</div>
+
+<div class="columns m-2">
+  <div class="column is-three-fifths">
+    <div id="medicine-table"></div>
+  </div>
+  <div class="column">
+    <div id="disease-table"></div>
+  </div>
+</div>
+
+<form id="confirm-modal" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-content box">
+    <p class="is-size-4 has-text-centered has-text-weight-bold pb-3">Bạn có chắc muốn xóa</p>
+    <div class="field is-grouped columns is-justify-content-center py-4">
+      <div class="control">
+        <button id="confirm-modal-confirm" class="button column is-link is-inline-flex" type="button">Xác
+          nhận</button>
+      </div>
+      <div class="control">
+        <button id="confirm-modal-close" class="button column is-link is-light is-inline-flex" type="button">Hủy
+          bỏ</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<form id="medicine-modify-modal" class="modal">
+  <div class="modal-background"></div>
+
+  <div class="modal-content box">
+
+    <div class="field">
+      <label class="label">Thuốc</label>
+      <div class="control">
+        <div class="select">
+          <select id="medicine-modify-modal-medicine" name="medicine" required>
+            {{#each medicines}}
+            <option value={{this.id}}>{{this.name}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Số lượng</label>
+      <div class="control">
+        <input id="medicine-modify-modal-number" , name="number" class="input" type="number" required>
+      </div>
+    </div>
+
+    <div class="field is-grouped">
+      <div class="control">
+        <button id="medicine-modify-modal-confirm" class="button is-link" type="button">Cập nhập</button>
+      </div>
+      <div class="control">
+        <button id="medicine-modify-modal-close" class="button is-link is-light" type="button">Hủy bỏ</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<form id="disease-modify-modal" class="modal">
+  <div class="modal-background"></div>
+
+  <div class="modal-content box">
+    <div class="field">
+      <label class="label">Bệnh</label>
+      <div class="control">
+        <div class="select">
+          <select id="disease-modify-modal-disease" name="disease" required>
+            {{#each diseases}}
+            <option value={{this.id}}>{{this.description}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="field is-grouped">
+      <div class="control">
+        <button id="disease-modify-modal-confirm" class="button is-link" type="button">Cập nhập</button>
+      </div>
+      <div class="control">
+        <button id="disease-modify-modal-close" class="button is-link is-light" type="button">Hủy bỏ</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script>
+  const medicineTable = new Tabulator("#medicine-table", {
+    layout: "fitColumns",
+    selectable: true,
+    height: "88vh",
+    selectableRangeMode: "click",
+    placeholder: "Không có dữ liệu",
+    columns: [
+      { title: "id", field: "id", visible: false },
+      { title: "STT", field: "STT", formatter: "rownum", width: 100 },
+      { title: "Thuốc", field: "medicine", sorter: "string" },
+      { title: "Số lượng", field: "number", sorter: "number" },
+    ],
+  });
+
+  const diseaseTable = new Tabulator("#disease-table", {
+    layout: "fitColumns",
+    selectable: true,
+    height: "88vh",
+    selectableRangeMode: "click",
+    placeholder: "Không có dữ liệu",
+    columns: [
+      { title: "id", field: "id", visible: false },
+      { title: "STT", field: "STT", formatter: "rownum", width: 100 },
+      { title: "Bệnh", field: "disease", sorter: "string" },
+    ],
+  });
+
+  medicineTable.on("tableBuilt", () => {
+    medicineTable.addData([
+      { id: 1, medicine: "med 1", number: 2 },
+      { id: 2, medicine: "med 1", number: 2 },
+      { id: 3, medicine: "med 1", number: 2 },
+      { id: 4, medicine: "med 1", number: 2 },
+    ], true);
+  });
+
+  diseaseTable.on("tableBuilt", () => {
+    diseaseTable.addData([
+      { id: 1, disease: "A" },
+      { id: 2, disease: "A" },
+      { id: 3, disease: "A" },
+      { id: 4, disease: "A" },
+    ], true)
+  });
+
+  let currentTable = medicineTable;
+
+  const medicineModifyModal = $("#medicine-modify-modal");
+  const diseaseModifyModal = $("#disease-modify-modal");
+
+  const buttonsStatusChanger = function (data, rows) {
+    modifyButton.disabled = data.length !== 1;
+    deleteButton.disabled = data.length === 0;
+  }
+
+  medicineTable.on("rowSelectionChanged", (data, rows) => {
+    if (currentTable !== medicineTable) {
+      currentTable = medicineTable;
+      diseaseTable.deselectRow();
+    }
+    buttonsStatusChanger(data, rows);
+  });
+
+  diseaseTable.on("rowSelectionChanged", (data, rows) => {
+    if (currentTable !== diseaseTable) {
+      currentTable = diseaseTable;
+      medicineTable.deselectRow();
+    }
+    buttonsStatusChanger(data, rows);
+  });
+
+  $("#load-data-button").onclick = function () {
+    const CHECKUP_MEDICINE_URL = "";
+    const CHECKUP_DISEASE_URL = "";
+
+    if (currentTable === medicineTable) {
+      medicineTable.setData(CHECKUP_MEDICINE_URL);
+    } else {
+      diseaseTable.setData(CHECKUP_DISEASE_URL);
+    }
+  };
+
+  $("#select-all-button").onclick = function () { currentTable.selectRow(); };
+  $("#deselect-all-button").onclick = function () { currentTable.deselectRow(); }
+
+  const modifyButton = $("#modify-button");
+  const deleteButton = $("#delete-button");
+  const confirmFormModal = $("#confirm-modal");
+  let isCreate = false;
+
+  $("#create-button").onclick = function () {
+    isCreate = true;
+    (currentTable === medicineTable ? medicineModifyModal : diseaseModifyModal).classList.add("is-active");
+  };
+
+  modifyButton.onclick = function () {
+    isCreate = false;
+    const row = currentTable.getSelectedData()[0];
+
+    if (currentTable === medicineTable) {
+      $("#medicine-modify-modal-medicine").value = row.medicine;
+      $("#medicine-modify-modal-number").value = row.number;
+      medicineModifyModal.classList.add('is-active');
+    } else {
+      $("#disease-modify-modal-disease").value = row.disease;
+      diseaseModifyModal.classList.add('is-active');
+    }
+  };
+
+  deleteButton.onclick = function () { confirmFormModal.classList.add("is-active"); };
+
+  $("#medicine-modify-modal-close").onclick = function () { medicineModifyModal.classList.remove("is-active"); }
+
+  $("#medicine-modify-modal-confirm").onclick = function () {
+    const medicine = $("#medicine-modify-modal-medicine").value;
+    const number = parseInt($("#medicine-modify-modal-number").value) || -1;
+
+    if (isCreate) {
+      medicineTable.addData([{ id: Math.round(Math.random() * 10000), medicine, number }], true);
+    } else {
+      medicineTable.updateData([{ id: medicineTable.getSelectedData()[0].id, medicine, number }]);
+    }
+
+    medicineModifyModal.classList.remove("is-active");
+    medicineTable.deselectRow();
+  }
+
+  $("#disease-modify-modal-confirm").onclick = function () {
+    const disease = $("#medicine-modify-modal-medicine").value;
+
+    if (isCreate) {
+      medicineTable.addData([{ id: Math.round(Math.random() * 10000), medicine, number }], true);
+    } else {
+      medicineTable.updateData([{ id: medicineTable.getSelectedData()[0].id, medicine, number }]);
+    }
+
+    diseaseModifyModal.classList.remove("is-active");
+    diseaseTable.deselectRow();
+  }
+
+  $("#disease-modify-modal-close").onclick = function () { diseaseModifyModal.classList.remove("is-active"); }
+
+  $("#confirm-modal-close").onclick = function () { confirmFormModal.classList.remove("is-active") }
+
+  $("#confirm-modal-confirm").onclick = function (e) {
+    e.preventDefault();
+    confirmFormModal.classList.remove("is-active");
+
+    onConfirmModalConfirmButtonClicked(table);
+    currentTable.deselectRow();
+  }
+</script>

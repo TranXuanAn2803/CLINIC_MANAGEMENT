@@ -1,9 +1,21 @@
 const apiCheckup = require('../models/api/checkup');
 const apiConstraint = require('../models/api/constraint');
+const apiMedicine = require('../models/api/medicine');
+const apiDisease = require('../models/api/disease');
+const apiPatient = require('../models/api/patient');
 const moment = require('moment');
 
-const view = (_, res) => {
-  res.render('checkup', { title: 'Phiếu khám' });
+const view = async (_, res) => {
+  const patients = await apiPatient.listPatient();
+  res.render('checkup', { title: 'Phiếu khám', patients });
+};
+
+const viewEditCheckup = async (req, res) => {
+  const id = req.params.id;
+  const checkup = (await apiCheckup.findCheckUp(id))[0];
+  const medicines = await apiMedicine.listMedicine();
+  const diseases = await apiDisease.listDisease();
+  res.render('checkup-edit', { title: 'Sửa phiếu khám', checkup, medicines, diseases });
 };
 
 const viewlist = async (req, res) => {
@@ -25,11 +37,13 @@ const viewlist = async (req, res) => {
   }
   console.log(checkup);
 };
+
 const viewListPatientOfDate = async (req, res) => {
   const date = moment('2022-1-17', 'YYYY-MM-DD');
   const p = await apiCheckup.listPatientOfDate(date);
   console.log(p);
 };
+
 const viewCheckUp = async (req, res) => {
   const id = 11;
   const checkup = await apiCheckup.findCheckUp(id);
@@ -67,7 +81,7 @@ const addCheckup = async (req, res) => {
     console.log(p);
     return true;
   } else {
-    console.log('patient is too much');
+    console.log('to many patients');
   }
 };
 const addDisease = async (req, res) => {
@@ -255,6 +269,7 @@ const getConst = async (req, res) => {
 
 module.exports = {
   view,
+  viewEditCheckup,
   addCheckup,
   editCheckup,
   deleteCheckUp,
