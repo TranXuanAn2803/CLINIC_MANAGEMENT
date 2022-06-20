@@ -8,6 +8,10 @@
     columns: TABLE_COLUMNS,
   });
 
+  table.on("tableBuilt", () => {
+    table.setData(DATA_URL);
+  });
+
   $("#load-data-button").onclick = function () { table.setData(DATA_URL); };
   $("#select-all-button").onclick = function () { table.selectRow(); };
   $("#deselect-all-button").onclick = function () { table.deselectRow(); }

@@ -21,7 +21,7 @@ router.get('/disease', async (_, res) => {
 });
 
 router.get('/unit', async (_, res) => {
-  const unit = await controllerUnit.listDisease();
+  const unit = await controllerDisease.listDisease();
   res.send(unit);
 });
 
