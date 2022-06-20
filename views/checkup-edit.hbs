@@ -132,24 +132,6 @@
     ],
   });
 
-  medicineTable.on("tableBuilt", () => {
-    medicineTable.addData([
-      { id: 1, medicine: "med 1", number: 2 },
-      { id: 2, medicine: "med 1", number: 2 },
-      { id: 3, medicine: "med 1", number: 2 },
-      { id: 4, medicine: "med 1", number: 2 },
-    ], true);
-  });
-
-  diseaseTable.on("tableBuilt", () => {
-    diseaseTable.addData([
-      { id: 1, disease: "A" },
-      { id: 2, disease: "A" },
-      { id: 3, disease: "A" },
-      { id: 4, disease: "A" },
-    ], true)
-  });
-
   let currentTable = medicineTable;
 
   const medicineModifyModal = $("#medicine-modify-modal");
@@ -167,6 +149,10 @@
     }
     buttonsStatusChanger(data, rows);
   });
+  medicineTable.on("headerClick", (e, c) => {
+    currentTable = medicineTable;
+    medicineTable.deselectRow();
+  });
 
   diseaseTable.on("rowSelectionChanged", (data, rows) => {
     if (currentTable !== diseaseTable) {
@@ -174,6 +160,10 @@
       medicineTable.deselectRow();
     }
     buttonsStatusChanger(data, rows);
+  });
+  diseaseTable.on("headerClick", () => {
+    currentTable = diseaseTable;
+    diseaseTable.deselectRow();
   });
 
   $("#load-data-button").onclick = function () {
@@ -236,9 +226,9 @@
     const disease = $("#medicine-modify-modal-medicine").value;
 
     if (isCreate) {
-      medicineTable.addData([{ id: Math.round(Math.random() * 10000), medicine, number }], true);
+      medicineTable.addData([{ id: Math.round(Math.random() * 10000), disease, number }], true);
     } else {
-      medicineTable.updateData([{ id: medicineTable.getSelectedData()[0].id, medicine, number }]);
+      medicineTable.updateData([{ id: medicineTable.getSelectedData()[0].id, disease, number }]);
     }
 
     diseaseModifyModal.classList.remove("is-active");
