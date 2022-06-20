@@ -10,7 +10,7 @@
         <div class="select">
           <select id="modify-modal-patient" name="patient" required>
             {{#each patients}}
-              <option value={{this.id}}>{{this.id}} - {{this.name}}</option>
+              <option value={{this.id}}>{{this.id}}-{{this.name}} </option>
             {{/each}}
           </select>
         </div>
@@ -20,7 +20,7 @@
     <div class="field">
       <label class="label">Ngày khám</label>
       <div class="control">
-        <input id="modify-modal-date" , name="date" class="input" type="date" required>
+        <input id="modify-modal-date" value="2000-01-01" name="date" class="input" type="date" required>
       </div>
     </div>
 
@@ -46,28 +46,50 @@
   const TABLE_COLUMNS = [
     { title: "id", field: "id", visible: false },
     { title: "STT", field: "STT", formatter: "rownum", width: 100 },
-    { title: "Tên bênh nhân", field: "patient", sorter: "string" }, // use link formatter
+    { title: "Tên bênh nhân", field: "patient_patient", sorter: "string" }, // use link formatter
     { title: "Triệu chứng", field: "symptoms", sorter: "string" },
     { title: "Ngày khám", field: "date", sorter: "string" },
-    { title: "Bệnh", field: "diseases", sorter: "string" },
-    { title: "Thuốc", field: "medicines", sorter: "string" },
+    { title: "Bệnh", field: "disease", sorter: "string" },
+    { title: "Thuốc", field: "medicine", sorter: "string" },
   ];
 
   const DATA_URL = "/api/fake/checkup";
-  const formModal = $("#modify-modal");
+  const FIND_URL = "/api/fake/checkup-find/";
 
+  const formModal = $("#modify-modal");
+  const patientModifyModalInput = $("#modify-modal-patient");
+  const dateModifyModalInput = $("#modify-modal-date");
+  const symptomsModifyModalInput = $("#modify-modal-symptoms");
+  document.getElementById("label-month").style.display = "inline";
+  document.getElementById("input-month").style.display = "inline";
   const onCreateButtonClicked = () => { formModal.classList.add("is-active"); }
-  const onConfirmModalConfirmButtonClicked =
-    table => table.deleteRow(table.getSelectedData().map(function (r) { return r.id; }));
+  const onConfirmModalConfirmButtonClicked =(table)=>
+  {
+    fetch('/checkup/delete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', },
+      body: JSON.stringify(table.getSelectedData()),
+    })
+      .then(response => { response.json(); })
+      .then(data => { console.log('Success:', data); })
+      .catch((error) => { console.error('Error:', error); });
+
+    table.deleteRow(table.getSelectedData().map(function (r) { return r.id; }))};
 
   const onModifyButtonClicked = row => {
     window.location.href = `http://${window.location.host}/checkup/edit/${row.id}`;
   };
 
-  $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active"); };
+  $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active");
+      patientModifyModalInput.parentElement.classList.remove("is-danger");
+      dateModifyModalInput.parentElement.classList.remove("is-danger");
+      symptomsModifyModalInput.classList.remove("is-danger"); 
+
+  };
   $("#modify-modal-confirm").onclick = function (e) {
     e.preventDefault();
     formModal.classList.remove("is-active");
+
     table.deselectRow();
   }
 
@@ -80,6 +102,70 @@
   }
 
   $("#table-inputs").appendChild(billButton);
+  $("#modify-modal-confirm").onclick = async function (e) {
+    e.preventDefault();
+
+    const patient = patientModifyModalInput.value;
+    const date = dateModifyModalInput.value;
+    const symptoms = symptomsModifyModalInput.value;
+
+    let hasError = false;
+
+
+    if (patient.length === 0) {
+      patientModifyModalInput.parentElement.classList.add("is-danger");
+      hasError = true;
+    }
+    else{
+      patientModifyModalInput.parentElement.classList.remove("is-danger");
+
+    }
+    if (date.length === 0) {
+      dateModifyModalInput.parentElement.classList.add("is-danger");
+      hasError = true;
+    }
+    else
+    {
+      dateModifyModalInput.parentElement.classList.remove("is-danger");
+    }
+    if (symptoms.length === 0) {
+      symptomsModifyModalInput.classList.add("is-danger");
+      hasError = true;
+    }
+    else
+    {
+      symptomsModifyModalInput.classList.remove("is-danger");
+    }
+    
+
+    if (hasError) {
+      return;
+    }
+
+    const checkup = {
+      patient: patient,
+      date: date,
+      symptoms: symptoms,
+    }
+    if (isCreate) {
+      fetch('/checkup/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(checkup),
+      })
+        
+    } 
+    formModal.classList.remove("is-active");
+    table.deselectRow();
+    setTimeout(function(){
+    table.setData(DATA_URL);
+    }, 5000);  
+    formModal.reset()
+  };
+$("#input-month").onchange= function() {
+    table.setData(FIND_URL+this.value)
+}
+
 </script>
 
 {{> table-modifiers-script}}
@@ -88,4 +174,10 @@
   table.on("rowSelectionChanged", function (data, rows) {
     billButton.disabled = data.length !== 1;
   });
+  modifyButton.onclick = function () {
+    isCreate = false;
+    const row = table.getSelectedData()[0];
+    onModifyButtonClicked(row);
+  };
+
 </script>

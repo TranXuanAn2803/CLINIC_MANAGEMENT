@@ -105,7 +105,7 @@
 </form>
 
 <script>
-  const medicineTable = new Tabulator("#medicine-table", {
+    const medicineTable = new Tabulator("#medicine-table", {
     layout: "fitColumns",
     selectable: true,
     height: "88vh",
@@ -114,11 +114,10 @@
     columns: [
       { title: "id", field: "id", visible: false },
       { title: "STT", field: "STT", formatter: "rownum", width: 100 },
-      { title: "Thuốc", field: "medicine", sorter: "string" },
+      { title: "Thuốc", field: "medicine_medicine", sorter: "string" },
       { title: "Số lượng", field: "number", sorter: "number" },
     ],
   });
-
   const diseaseTable = new Tabulator("#disease-table", {
     layout: "fitColumns",
     selectable: true,
@@ -128,38 +127,22 @@
     columns: [
       { title: "id", field: "id", visible: false },
       { title: "STT", field: "STT", formatter: "rownum", width: 100 },
-      { title: "Bệnh", field: "disease", sorter: "string" },
+      { title: "Bệnh", field: "iddisease_disease", sorter: "string" },
     ],
   });
-
-  medicineTable.on("tableBuilt", () => {
-    medicineTable.addData([
-      { id: 1, medicine: "med 1", number: 2 },
-      { id: 2, medicine: "med 1", number: 2 },
-      { id: 3, medicine: "med 1", number: 2 },
-      { id: 4, medicine: "med 1", number: 2 },
-    ], true);
-  });
-
-  diseaseTable.on("tableBuilt", () => {
-    diseaseTable.addData([
-      { id: 1, disease: "A" },
-      { id: 2, disease: "A" },
-      { id: 3, disease: "A" },
-      { id: 4, disease: "A" },
-    ], true)
-  });
-
   let currentTable = medicineTable;
+  const checkupid={{checkup.id}}
+  const CHECKUP_MEDICINE_URL = "/api/fake/checkupMedicine/"+{{ checkup.id }};
+  const CHECKUP_DISEASE_URL = "/api/fake/checkupDisease/"+{{ checkup.id }};
+  let oldmedicine=0;
+  let olddisease=0;
 
   const medicineModifyModal = $("#medicine-modify-modal");
   const diseaseModifyModal = $("#disease-modify-modal");
-
   const buttonsStatusChanger = function (data, rows) {
     modifyButton.disabled = data.length !== 1;
     deleteButton.disabled = data.length === 0;
   }
-
   medicineTable.on("rowSelectionChanged", (data, rows) => {
     if (currentTable !== medicineTable) {
       currentTable = medicineTable;
@@ -167,7 +150,10 @@
     }
     buttonsStatusChanger(data, rows);
   });
-
+  medicineTable.on("headerClick", (e, c) => {
+    currentTable = medicineTable;
+    medicineTable.deselectRow();
+  });
   diseaseTable.on("rowSelectionChanged", (data, rows) => {
     if (currentTable !== diseaseTable) {
       currentTable = diseaseTable;
@@ -175,85 +161,185 @@
     }
     buttonsStatusChanger(data, rows);
   });
-
+  diseaseTable.on("headerClick", () => {
+    currentTable = diseaseTable;
+    diseaseTable.deselectRow();
+  });
   $("#load-data-button").onclick = function () {
-    const CHECKUP_MEDICINE_URL = "";
-    const CHECKUP_DISEASE_URL = "";
-
     if (currentTable === medicineTable) {
       medicineTable.setData(CHECKUP_MEDICINE_URL);
     } else {
       diseaseTable.setData(CHECKUP_DISEASE_URL);
     }
   };
-
   $("#select-all-button").onclick = function () { currentTable.selectRow(); };
   $("#deselect-all-button").onclick = function () { currentTable.deselectRow(); }
-
   const modifyButton = $("#modify-button");
   const deleteButton = $("#delete-button");
   const confirmFormModal = $("#confirm-modal");
   let isCreate = false;
-
   $("#create-button").onclick = function () {
     isCreate = true;
     (currentTable === medicineTable ? medicineModifyModal : diseaseModifyModal).classList.add("is-active");
   };
-
   modifyButton.onclick = function () {
     isCreate = false;
     const row = currentTable.getSelectedData()[0];
-
     if (currentTable === medicineTable) {
       $("#medicine-modify-modal-medicine").value = row.medicine;
       $("#medicine-modify-modal-number").value = row.number;
+      oldmedicine=row.medicine
       medicineModifyModal.classList.add('is-active');
     } else {
-      $("#disease-modify-modal-disease").value = row.disease;
+      $("#disease-modify-modal-disease").value = row.iddisease;
+      olddisease=row.iddisease
       diseaseModifyModal.classList.add('is-active');
     }
   };
-
   deleteButton.onclick = function () { confirmFormModal.classList.add("is-active"); };
-
-  $("#medicine-modify-modal-close").onclick = function () { medicineModifyModal.classList.remove("is-active"); }
+  $("#medicine-modify-modal-close").onclick = function () { medicineModifyModal.classList.remove("is-active");      
+   medicineModifyModal.classList.remove("is-danger");
+}
 
   $("#medicine-modify-modal-confirm").onclick = function () {
     const medicine = $("#medicine-modify-modal-medicine").value;
     const number = parseInt($("#medicine-modify-modal-number").value) || -1;
-
-    if (isCreate) {
-      medicineTable.addData([{ id: Math.round(Math.random() * 10000), medicine, number }], true);
-    } else {
-      medicineTable.updateData([{ id: medicineTable.getSelectedData()[0].id, medicine, number }]);
+    const hasError=false
+    if (medicine.length === 0) {
+      medicineModifyModal.classList.add("is-danger");
+      hasError = true;
     }
+    else
+    {
+      medicineModifyModal.classList.remove("is-danger");
 
+    }
+    const checkupMedicine={
+      checkup: checkupid,
+      medicine: medicine,
+      number: number  
+    }
+    if (hasError)
+    {
+      return
+    }
+    if (isCreate) {
+      fetch('/checkup/checkupMedicine/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(checkupMedicine),
+      })
+        .then(response => { response.json(); })
+        .then(data => { console.log('Success:', data); })
+        .catch((error) => { console.error('Error:', error); });
+
+
+    } else {
+      checkupMedicine.oldmedicine=oldmedicine
+      fetch('/checkup/checkupMedicine/edit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(checkupMedicine),
+      })
+        .then(response => { response.json(); })
+        .then(data => { console.log('Success:', data); })
+        .catch((error) => { console.error('Error:', error); });
+
+    }
+        setTimeout(function(){
+    medicineTable.setData(CHECKUP_MEDICINE_URL);
+    }, 2000);  
+
+    formModal.reset()
     medicineModifyModal.classList.remove("is-active");
-    medicineTable.deselectRow();
   }
-
   $("#disease-modify-modal-confirm").onclick = function () {
-    const disease = $("#medicine-modify-modal-medicine").value;
+    const disease = $("#disease-modify-modal-disease").value;
+    const checkupDisease={
+      idcheckup: checkupid,
+      iddisease: disease
+    }
+    const hasError=false
+    if (medicine.length === 0) {
+      diseaseModifyModal.classList.add("is-danger");
+      hasError = true;
+    }
+    else
+    {
+      diseaseModifyModal.classList.remove("is-danger");
 
-    if (isCreate) {
-      medicineTable.addData([{ id: Math.round(Math.random() * 10000), medicine, number }], true);
-    } else {
-      medicineTable.updateData([{ id: medicineTable.getSelectedData()[0].id, medicine, number }]);
+    }
+    if(hasError)
+    {
+      return
     }
 
+    if (isCreate) {
+      fetch('/checkup/checkupDisease/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(checkupDisease),
+      })
+        .then(response => { response.json(); })
+        .then(data => { console.log('Success:', data); })
+        .catch((error) => { console.error('Error:', error); });
+
+    } else {
+      checkupDisease.olddisease=olddisease
+      console.log(olddisease)
+      fetch('/checkup/checkupDisease/edit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(checkupDisease),
+      })
+        .then(response => { response.json(); })
+        .then(data => { console.log('Success:', data); })
+        .catch((error) => { console.error('Error:', error); });
+
+    }
     diseaseModifyModal.classList.remove("is-active");
+    setTimeout(function(){
+    diseaseTable.setData(CHECKUP_DISEASE_URL);
+    }, 2000);  
     diseaseTable.deselectRow();
+    diseaseModifyModal.reset()
+  }
+  const onConfirmModalConfirmButtonClicked = (currentTable) => {
+    if (currentTable === diseaseTable) {
+    fetch('/checkup/checkupDisease/delete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', },
+      body: JSON.stringify(currentTable.getSelectedData()),
+    })
+      .then(response => { response.json(); })
+      .then(data => { console.log('Success:', data); })
+      .catch((error) => { console.error('Error:', error); });
+  setTimeout(function(){
+    diseaseTable.setData(CHECKUP_DISEASE_URL);    
+    }, 2000);  
+
+      
+
+    } else {
+    fetch('/checkup/checkupMedicine/delete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', },
+      body: JSON.stringify(currentTable.getSelectedData()),
+    })
+      .then(response => { response.json(); })
+      .then(data => { console.log('Success:', data); })
+      .catch((error) => { console.error('Error:', error); });
+  setTimeout(function(){
+    medicineTable.setData(CHECKUP_MEDICINE_URL);    
+    }, 2000);     }
   }
 
   $("#disease-modify-modal-close").onclick = function () { diseaseModifyModal.classList.remove("is-active"); }
-
   $("#confirm-modal-close").onclick = function () { confirmFormModal.classList.remove("is-active") }
-
   $("#confirm-modal-confirm").onclick = function (e) {
     e.preventDefault();
     confirmFormModal.classList.remove("is-active");
-
-    onConfirmModalConfirmButtonClicked(table);
+    onConfirmModalConfirmButtonClicked(currentTable);
     currentTable.deselectRow();
   }
 </script>

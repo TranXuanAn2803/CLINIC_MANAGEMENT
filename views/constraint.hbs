@@ -86,12 +86,12 @@
     const maxPatient = maxPatientInput.value;
     const examinationFee = examinationFeeInput.value;
     const hasError = false;
-    const constraint = {
-      username: username,
-      password: password,
-      maxPatient: maxPatient,
-      examinationFee: examinationFee,
-    }
+    const constraint={
+        username: username,
+        password: password,
+        maxPatient: maxPatient,
+        examinationFee: examinationFee,
+      }
 
     if (username.length === 0) {
       usernameInput.classList.add("is-danger");
@@ -104,21 +104,35 @@
     if (maxPatient.length === 0) {
       maxPatientInput.classList.add("is-danger");
       hasError = true;
-    } if (examinationFee.length === 0) {
+    }if (examinationFee.length === 0) {
       examinationFee.classList.add("is-danger");
       hasError = true;
     }
     if (hasError) {
       return;
     }
+    console.log(constraint)
     fetch('/constraint/edit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', },
-      body: JSON.stringify(constraint),
-    })
-      .then(response => { response.json(); })
-      .then(data => { console.log('Success:', data); })
-      .catch((error) => { console.error('Error:', error); });
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(constraint),
+        })
+        .then(response => {
+          response.json()
+        })
+        .then(data => {
+          console.log('Success:', data);
+        })
+        .catch((error) => {
+        console.error('Error:', error);
+      });
+    setInputsDisabled(true);
+    modifyButton.style.display = "inline-flex"
+    updateButton.style.display = "none";
+    cancelButton.style.display = "none";
+
   }
 
 </script>
