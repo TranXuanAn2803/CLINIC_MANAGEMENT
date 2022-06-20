@@ -70,6 +70,22 @@
     formModal.classList.remove("is-active");
     table.deselectRow();
   }
+
+  const billButton = document.createElement("button");
+  billButton.classList.add("button", "is-warning");
+  billButton.textContent = "Xuất hoá đơn";
+  billButton.onclick = function() {
+    const row = table.getSelectedData()[0];
+    window.location.href = `http://${window.location.host}/checkup/bill/${row.id}`;
+  }
+
+  $("#table-inputs").appendChild(billButton);
 </script>
 
 {{> table-modifiers-script}}
+
+<script>
+  table.on("rowSelectionChanged", function (data, rows) {
+    billButton.disabled = data.length !== 1;
+  });
+</script>

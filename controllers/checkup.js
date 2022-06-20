@@ -18,6 +18,14 @@ const viewEditCheckup = async (req, res) => {
   res.render('checkup-edit', { title: 'Sửa phiếu khám', checkup, medicines, diseases });
 };
 
+const viewBill = async (req, res) => {
+  const id = req.params.id;
+  const checkup = (await apiCheckup.findCheckUp(id))[0];
+  const { examinationFee } = await apiConstraint.examinationFee;
+  const medicineFee = 1000;
+  res.render('checkup-bill', { title: 'Hoá đơn', checkup, examinationFee, medicineFee });
+};
+
 const viewlist = async (req, res) => {
   const checkup = await apiCheckup.listCheckUp2();
   for (const c of checkup) {
@@ -270,6 +278,7 @@ const getConst = async (req, res) => {
 module.exports = {
   view,
   viewEditCheckup,
+  viewBill,
   addCheckup,
   editCheckup,
   deleteCheckUp,

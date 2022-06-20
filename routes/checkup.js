@@ -5,4 +5,6 @@ router.get('/', controller.view);
 
 router.get('/edit/:id', controller.viewEditCheckup);
 
+router.get('/bill/:id', controller.viewBill);
+
 module.exports = router;
