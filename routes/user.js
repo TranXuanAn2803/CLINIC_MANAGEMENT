@@ -9,12 +9,13 @@ router.post('/login', passport.authenticate('local', {
   failureRedirect: '/user/login'
 
 }),
-function (req, res) {
-  if (req.user) {
-    req.session.user = true;
-    res.redirect('/');
+  function (req, res) {
+    if (req.user) {
+      req.session.user = true;
+      res.redirect('/');
+    }
+
   }
-}
 
 );
 router.get('/logout', (req, res) => {
