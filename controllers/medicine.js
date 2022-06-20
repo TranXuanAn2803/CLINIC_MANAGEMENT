@@ -15,9 +15,9 @@ const listMedicine = async () => {
     m.unit = m.unit_unit.type;
     m.userManual = m.usermanual_usermanual.description;
   }
-
   return medicine;
 };
+
 const addMedicine = async (req, res) => {
   const medicine = req.body;
   try {

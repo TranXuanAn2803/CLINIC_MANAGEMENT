@@ -8,9 +8,9 @@ router.get('/', (req, res) => {
     res.redirect('/user/login');
   }
 });
+
 router.post('/add', controller.addMedicine);
 router.post('/edit', controller.editMedicine);
-
 router.post('/delete', controller.deleteMedicine);
 
 module.exports = router;

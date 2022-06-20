@@ -4,11 +4,7 @@ const view = (_, res) => {
   res.render('disease', { title: 'Bệnh' });
 };
 
-const listDisease = async (req, res) => {
-  const disease = await apiDisease.listDisease();
-
-  return disease;
-};
+const listDisease = apiDisease.listDisease();
 
 const addDisease = async (req, res) => {
   const disease = req.body;

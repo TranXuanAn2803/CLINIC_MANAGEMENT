@@ -35,27 +35,16 @@
   const descriptionModifyModalInput = $("#modify-modal-description");
 
   const onCreateButtonClicked = () => { formModal.classList.add("is-active"); }
-  const onConfirmModalConfirmButtonClicked =(table)=>
-  {
-      fetch('/usermanual/delete', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          
-          body: JSON.stringify(table.getSelectedData()),
-          })
-          .then(response => {
-            response.json()
-          })
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch((error) => {
-          console.error('Error:', error);
-        });
-        table.deleteRow(table.getSelectedData().map(function (r) { return r.id; }));
-
+  const onConfirmModalConfirmButtonClicked = (table) => {
+    fetch('/usermanual/delete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', },
+      body: JSON.stringify(table.getSelectedData()),
+    })
+      .then(response => { response.json(); })
+      .then(data => { console.log('Success:', data); })
+      .catch((error) => { console.error('Error:', error); });
+    table.deleteRow(table.getSelectedData().map(function (r) { return r.id; }));
   }
 
   const onModifyButtonClicked = row => {
@@ -72,48 +61,32 @@
       descriptionModifyModalInput.classList.add("is-danger");
       return;
     }
-    const userManual= {
+    const userManual = {
       description: description
     }
     if (isCreate) {
       table.addData([{ id: Math.round(Math.random() * 10000), description }], true);
       fetch('/usermanual/add', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(userManual),
-          })
-          .then(response => {
-            response.json()
-          })
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch((error) => {
-          console.error('Error:', error);
-        });
-        formModal.reset()
-        table.setData(DATA_URL);
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(userManual),
+      })
+        .then(response => { response.json(); })
+        .then(data => { console.log('Success:', data); })
+        .catch((error) => { console.error('Error:', error); });
+      formModal.reset()
+      table.setData(DATA_URL);
     } else {
-      userManual.id=table.getSelectedData()[0].id
+      userManual.id = table.getSelectedData()[0].id
       table.updateData([{ id: table.getSelectedData()[0].id, description }]);
       fetch('/usermanual/edit', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(userManual),
-          })
-          .then(response => {
-            response.json()
-          })
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch((error) => {
-          console.error('Error:', error);
-        });
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(userManual),
+      })
+        .then(response => { response.json(); })
+        .then(data => { console.log('Success:', data); })
+        .catch((error) => { console.error('Error:', error); });
     }
 
     formModal.classList.remove("is-active");

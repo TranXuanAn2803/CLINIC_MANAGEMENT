@@ -42,15 +42,9 @@
       headers: { 'Content-Type': 'application/json', },
       body: JSON.stringify(table.getSelectedData()),
     })
-      .then(response => {
-        response.json()
-      })
-      .then(data => {
-        console.log('Success:', data);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+      .then(response => { response.json(); })
+      .then(data => { console.log('Success:', data); })
+      .catch((error) => { console.error('Error:', error); });
     table.deleteRow(table.getSelectedData().map(function (r) { return r.id; }));
   }
   const onModifyButtonClicked = row => {
@@ -74,20 +68,12 @@
       table.addData([{ id: Math.round(Math.random() * 10000), description }], true);
       fetch('/disease/add', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json', },
         body: JSON.stringify(disease),
       })
-        .then(response => {
-          response.json()
-        })
-        .then(data => {
-          console.log('Success:', data);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
+        .then(response => { response.json(); })
+        .then(data => { console.log('Success:', data); })
+        .catch((error) => { console.error('Error:', error); });
       formModal.reset()
       table.setData(DATA_URL);
     } else {
@@ -95,20 +81,12 @@
       table.updateData([{ id: table.getSelectedData()[0].id, description }]);
       fetch('/disease/edit', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json', },
         body: JSON.stringify(disease),
       })
-        .then(response => {
-          response.json()
-        })
-        .then(data => {
-          console.log('Success:', data);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
+        .then(response => { response.json(); })
+        .then(data => { console.log('Success:', data); })
+        .catch((error) => { console.error('Error:', error); });
     }
 
     formModal.classList.remove("is-active");
