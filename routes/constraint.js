@@ -8,6 +8,6 @@ router.get('/', (req, res) => {
     res.redirect('/user/login');
   }
 });
-router.post('/edit', controller.editContraint);
+router.post('/edit', controller.editConstraint);
 
 module.exports = router;

@@ -3,11 +3,13 @@ const apiDisease = require('../models/api/disease');
 const view = (_, res) => {
   res.render('disease', { title: 'Bệnh' });
 };
+
 const listDisease = async (req, res) => {
   const disease = await apiDisease.listDisease();
 
   return disease;
 };
+
 const addDisease = async (req, res) => {
   const disease = req.body;
   try {
@@ -16,6 +18,7 @@ const addDisease = async (req, res) => {
     console.log(err);
   }
 };
+
 const editDisease = async (req, res) => {
   const disease = req.body;
   try {
@@ -24,6 +27,7 @@ const editDisease = async (req, res) => {
     console.log(err);
   }
 };
+
 const deleteDisease = async (req, res) => {
   const disease = req.body;
   for (const d of disease) {

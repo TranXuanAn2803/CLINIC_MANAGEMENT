@@ -1,4 +1,5 @@
 const apiConstraint = require('../models/api/constraint');
+
 const view = async (_, res) => {
   const name = await apiConstraint.username;
   const password = await apiConstraint.password;
@@ -13,7 +14,8 @@ const view = async (_, res) => {
     examinationFee: examinationFee.examinationFee
   });
 };
-const editContraint = async (req, res) => {
+
+const editConstraint = async (req, res) => {
   const newConstraint = req.body;
   const name = await apiConstraint.username;
   try {
@@ -27,4 +29,4 @@ const editContraint = async (req, res) => {
   console.log(password.password, maxPatient.maxPatient, examinationFee.examinationFee);
 };
 
-module.exports = { view, editContraint };
+module.exports = { view, editConstraint };

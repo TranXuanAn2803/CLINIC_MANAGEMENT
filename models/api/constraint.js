@@ -9,14 +9,15 @@ const password = findConstraint('password');
 const maxPatient = findConstraint('maxPatient');
 
 const examinationFee = findConstraint('examinationFee');
-const updateConstraint = async (newContraint, user) => {
+const updateConstraint = async (newConstraint, user) => {
   await models.constraint.update({
-    username: newContraint.username,
-    password: newContraint.password,
-    maxPatient: newContraint.maxPatient,
-    examinationFee: newContraint.examinationFee
+    username: newConstraint.username,
+    password: newConstraint.password,
+    maxPatient: newConstraint.maxPatient,
+    examinationFee: newConstraint.examinationFee
   }, { where: { username: user } });
 };
+
 module.exports = {
   username,
   password,

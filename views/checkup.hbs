@@ -6,13 +6,9 @@
   <div class="modal-content box">
     <div class="field">
       <label class="label">Tên</label>
-        <div class="select">
-          <select id="modify-modal-unit" name="unit" required>
-            {{#each patient}}
-              <option value={{this.id}}>{{this.name}}</option>
-            {{/each}}
-          </select>
-        </div>    
+      <div class="control">
+        <input id="modify-modal-name" name="name" class="input" type="text">
+      </div>
     </div>
 
     <div class="field">
@@ -64,6 +60,7 @@
   ];
 
   const DATA_URL = "/api/fake/checkup";
+  const formModal = $("#modify-modal");
 
   const onCreateButtonClicked = () => { formModal.classList.add("is-active"); }
   const onConfirmModalConfirmButtonClicked =

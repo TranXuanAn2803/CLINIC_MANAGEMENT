@@ -36,25 +36,21 @@
   const descriptionModifyModalInput = $("#modify-modal-description");
 
   const onCreateButtonClicked = () => { formModal.classList.add("is-active"); }
-  const onConfirmModalConfirmButtonClicked =(table)=>
-  {
+  const onConfirmModalConfirmButtonClicked = table => {
     fetch('/disease/delete', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          
-          body: JSON.stringify(table.getSelectedData()),
-          })
-          .then(response => {
-            response.json()
-          })
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch((error) => {
-          console.error('Error:', error);
-        });
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', },
+      body: JSON.stringify(table.getSelectedData()),
+    })
+      .then(response => {
+        response.json()
+      })
+      .then(data => {
+        console.log('Success:', data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
     table.deleteRow(table.getSelectedData().map(function (r) { return r.id; }));
   }
   const onModifyButtonClicked = row => {
@@ -71,46 +67,46 @@
       descriptionModifyModalInput.classList.add("is-danger");
       return;
     }
-    const disease={
+    const disease = {
       description: description,
     }
     if (isCreate) {
       table.addData([{ id: Math.round(Math.random() * 10000), description }], true);
       fetch('/disease/add', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(disease),
-          })
-          .then(response => {
-            response.json()
-          })
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch((error) => {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(disease),
+      })
+        .then(response => {
+          response.json()
+        })
+        .then(data => {
+          console.log('Success:', data);
+        })
+        .catch((error) => {
           console.error('Error:', error);
         });
-        formModal.reset()
-        table.setData(DATA_URL);  
+      formModal.reset()
+      table.setData(DATA_URL);
     } else {
-      disease.id=table.getSelectedData()[0].id
+      disease.id = table.getSelectedData()[0].id
       table.updateData([{ id: table.getSelectedData()[0].id, description }]);
       fetch('/disease/edit', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(disease),
-          })
-          .then(response => {
-            response.json()
-          })
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch((error) => {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(disease),
+      })
+        .then(response => {
+          response.json()
+        })
+        .then(data => {
+          console.log('Success:', data);
+        })
+        .catch((error) => {
           console.error('Error:', error);
         });
     }

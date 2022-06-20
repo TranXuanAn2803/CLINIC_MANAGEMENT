@@ -22,26 +22,16 @@
     placeholder: "Không có dữ liệu",
     columns: TABLE_COLUMNS,
   });
-$("#bday-month").onchange= function() {
-    const date={
-      date: this.value
-    }
+  $("#bday-month").onchange = function () {
+    const date = { date: this.value };
     fetch('/report/medicine', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(date),
-          })
-          .then(response => {
-            table.setData(response.json());
-          })
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch((error) => {
-          console.error('Error:', error);
-        });
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', },
+      body: JSON.stringify(date),
+    })
+      .then(response => { table.setData(response.json()); })
+      .then(data => { console.log('Success:', data); })
+      .catch((error) => { console.error('Error:', error); });
   }
 
 </script>

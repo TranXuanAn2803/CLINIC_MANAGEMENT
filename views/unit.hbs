@@ -35,25 +35,15 @@
   const descriptionModifyModalInput = $("#modify-modal-description");
 
   const onCreateButtonClicked = () => { formModal.classList.add("is-active"); }
-  const onConfirmModalConfirmButtonClicked =(table)=>
-  {
+  const onConfirmModalConfirmButtonClicked = (table) => {
     fetch('/unit/delete', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          
-          body: JSON.stringify(table.getSelectedData()),
-          })
-          .then(response => {
-            response.json()
-          })
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch((error) => {
-          console.error('Error:', error);
-        });
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', },
+      body: JSON.stringify(table.getSelectedData()),
+    })
+      .then(response => { response.json(); })
+      .then(data => { console.log('Success:', data); })
+      .catch((error) => { console.error('Error:', error); });
     table.deleteRow(table.getSelectedData().map(function (r) { return r.id; }));
   }
   const onModifyButtonClicked = row => {
@@ -70,48 +60,32 @@
       descriptionModifyModalInput.classList.add("is-danger");
       return;
     }
-    const unit={
-      type:type,
+    const unit = {
+      type: type,
     }
     if (isCreate) {
       table.addData([{ id: Math.round(Math.random() * 10000), type }], true);
       fetch('/unit/add', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(unit),
-          })
-          .then(response => {
-            response.json()
-          })
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch((error) => {
-          console.error('Error:', error);
-        });
-        formModal.reset()
-        table.setData(DATA_URL);
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(unit),
+      })
+        .then(response => { response.json(); })
+        .then(data => { console.log('Success:', data); })
+        .catch((error) => { console.error('Error:', error); });
+      formModal.reset()
+      table.setData(DATA_URL);
     } else {
-      unit.id=table.getSelectedData()[0].id
+      unit.id = table.getSelectedData()[0].id
       table.updateData([{ id: table.getSelectedData()[0].id, type }]);
       fetch('/unit/edit', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(unit),
-          })
-          .then(response => {
-            response.json()
-          })
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch((error) => {
-          console.error('Error:', error);
-        });
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(unit),
+      })
+        .then(response => { response.json(); })
+        .then(data => { console.log('Success:', data); })
+        .catch((error) => { console.error('Error:', error); });
     }
 
     formModal.classList.remove("is-active");
