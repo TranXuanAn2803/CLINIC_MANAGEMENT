@@ -23,7 +23,13 @@ module.exports = function(sequelize, DataTypes) {
         address: {
             type: DataTypes.TEXT,
             allowNull: true
+        },
+        isDeleted: {
+            type: DataTypes.BOOLEAN,
+            allowNull: true,
+            defaultValue: false
         }
+
     }, {
         sequelize,
         tableName: 'patient',

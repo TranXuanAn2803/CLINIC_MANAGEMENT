@@ -1,7 +1,6 @@
 <div class="m-2">
-  <label for="bday-month">Tháng</label>
-  <input id="bday-month" type="month" name="bday-month">
-
+  <label class="button" style="border: none;">Tháng</label>
+  <input class="input is-primary" style="width: 200px;" id="bday-month" type="month" name="bday-month">
 </div>
 <div id="table"></div>
 
@@ -9,11 +8,12 @@
   const TABLE_COLUMNS = [
     { title: "id", field: "id", visible: false },
     { title: "STT", field: "STT", formatter: "rownum", width: 100 },
-    { title: "Đơn vị tính", field: "unit", sorter: "string" },
-    { title: "Số lượng", field: "number", sorter: "number" },
-    { title: "Số lần dùng", field: "useTime", sorter: "number" },
+    { title: "Đơn vị tính", field: "name", sorter: "string" },
+    { title: "Đơn vị tính", field: "type", sorter: "string" },
+    { title: "Số lượng", field: "sumofNumber", sorter: "number" },
+    { title: "Số lần dùng", field: "countOfCheckup", sorter: "number" },
   ];
-  const table = new Tabulator("#table", {
+const table = new Tabulator("#table", {
     layout: "fitColumns",
     selectable: true,
     height: "88vh",
@@ -21,26 +21,11 @@
     placeholder: "Không có dữ liệu",
     columns: TABLE_COLUMNS,
   });
+const DATA_URL = "/api/fake/reportMedicine/";
+
 $("#bday-month").onchange= function() {
-    const date={
-      date: this.value
-    }
-    fetch('/report/medicine', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(date),
-          })
-          .then(response => {
-            table.setData(response.json());
-          })
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch((error) => {
-          console.error('Error:', error);
-        });
-  }
+    table.setData(DATA_URL+this.value)
+}
+
 
 </script>

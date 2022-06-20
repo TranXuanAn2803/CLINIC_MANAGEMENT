@@ -64,6 +64,9 @@
   const genderModifyModalInput = $("#modify-modal-gender");
   const yearOfBirthModifyModalInput = $("#modify-modal-year-of-birth");
   const addressModifyModalInput = $("#modify-modal-address");
+  document.getElementById("label-month").style.display = "inline";
+  document.getElementById("input-month").style.display = "inline";
+
 
   const onCreateButtonClicked = () => { formModal.classList.add("is-active"); }
   const onConfirmModalConfirmButtonClicked =(table)=>
@@ -87,6 +90,7 @@
     table.deleteRow(
       table.getSelectedData().map(function (r) { return r.id; })
     );
+    
   }
   const onModifyButtonClicked = row => {
     nameModifyModalInput.value = row.name;
@@ -94,8 +98,13 @@
     addressModifyModalInput.value = row.address;
   };
 
-  $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active"); };
+  $("#modify-modal-close").onclick = function () { 
+    nameModifyModalInput.classList.remove("is-danger");
+    addressModifyModalInput.classList.remove("is-danger");
+    formModal.classList.remove("is-active"); 
+  };
   $("#modify-modal-confirm").onclick = function (e) {
+
     const name = nameModifyModalInput.value;
     const gender = genderModifyModalInput.value;
     const yearOfBirth = yearOfBirthModifyModalInput.value;
@@ -112,9 +121,19 @@
       nameModifyModalInput.classList.add("is-danger");
       hasError = true;
     }
+    else
+    {
+      nameModifyModalInput.classList.remove("is-danger");
+
+    }
     if (yearOfBirth.length === 0) {
       addressModifyModalInput.classList.add("is-danger");
       hasError = true;
+    }
+    else
+    {
+      addressModifyModalInput.classList.remove("is-danger");
+
     }
     
     if (hasError) {
@@ -167,6 +186,10 @@
     table.deselectRow();
     formModal.reset()
   }
+  $("#input-month").onchange= function() {
+    table.setData(DATA_URL+this.value)
+}
+
 </script>
 
 {{> table-modifiers-script}}

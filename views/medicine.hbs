@@ -116,7 +116,10 @@
 
   };
 
-  $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active"); };
+  $("#modify-modal-close").onclick = function () { 
+    formModal.classList.remove("is-active"); 
+    formModal.reset()
+    };
 
   $("#modify-modal-confirm").onclick = function (e) {
     e.preventDefault();
@@ -134,21 +137,38 @@
       nameModifyModalInput.classList.add("is-danger");
       hasError = true;
     }
+    else
+    {
+      nameModifyModalInput.classList.remove("is-danger");
+    }
     if (price < 0) {
       priceModifyModalInput.classList.add("is-danger");
       hasError = true;
     }
+    else
+    {
+      priceModifyModalInput.classList.remove("is-danger");
+    }
     if (unit.length === 0) {
-      unitModifyModalInput.classList.add("is-danger");
+      unitModifyModalInput.parentElement.classList.add("is-danger");
       hasError = true;
     }
+    else
+    {
+      unitModifyModalInput.classList.remove("is-danger");
+    }
     if (userManual.length === 0) {
-      userManualModifyModalInput.classList.add("is-danger");
+      userManualModifyModalInput.parentElement.classList.add("is-danger");
       hasError = true;
+    }
+    else
+    {
+      userManualModifyModalInput.classList.remove("is-danger");
     }
 
     if (hasError) {
       return;
+    
     }
 
     const medicine={

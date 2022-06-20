@@ -1,31 +1,28 @@
 const apiConstraint = require("../models/api/constraint");
 const view = async(_, res) => {
     const name = await apiConstraint.username
-    const password = await apiConstraint.password
-    const maxPatient = await apiConstraint.maxPatient
-    const examinationFee = await apiConstraint.examinationFee
-
+    var c = await apiConstraint.find(name.username)
+    c = c[0]
+    console.log(c)
     res.render('constraint', {
         title: 'Quy định',
-        username: name.username,
-        password: password.password,
-        maxPatient: maxPatient.maxPatient,
-        examinationFee: examinationFee.examinationFee
+        username: c.username,
+        password: c.password,
+        maxPatient: c.maxPatient,
+        examinationFee: c.examinationFee
     });
 };
 const editContraint = async(req, res) => {
     const newConstraint = req.body
     const name = await apiConstraint.username
+    console.log(newConstraint)
     try {
-        await apiConstraint.updateConstraint(newConstraint, name.username);
+        await apiConstraint.updateConstraint(newConstraint, name);
     } catch (err) {
-        console.log(err);
+        return false;
     }
-    const password = await apiConstraint.password
-    const maxPatient = await apiConstraint.maxPatient
-    const examinationFee = await apiConstraint.examinationFee
-    console.log(password.password, maxPatient.maxPatient, examinationFee.examinationFee)
-    return;
+
+    const constraint = await apiConstraint.find(name.username)
 };
 
 module.exports = { view, editContraint };

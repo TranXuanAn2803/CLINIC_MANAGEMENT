@@ -11,10 +11,10 @@ const listPatient = async() => {
     return patient
 
 }
-const findPatient = async(req, res) => {
-    const startdate = moment('2022-1-1', 'YYYY-MM-DD');
-
-    const enddate = moment('2022-1-31', 'YYYY-MM-DD');
+const findPatient = async(m) => {
+    const date = moment(m.month, 'YYYY-MM');
+    const month = parseInt(date.format('MM'));
+    const year = parseInt(date.format('YYYY'));
     let pt = null;
     try {
         pt = await apiPatient.findPatient(startdate, enddate);

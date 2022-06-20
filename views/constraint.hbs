@@ -128,8 +128,11 @@
         .catch((error) => {
         console.error('Error:', error);
       });
-  
-    console.log("jdsjdj")
+    setInputsDisabled(true);
+    modifyButton.style.display = "inline-flex"
+    updateButton.style.display = "none";
+    cancelButton.style.display = "none";
+
   }
 
 </script>

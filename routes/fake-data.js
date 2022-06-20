@@ -69,13 +69,23 @@ router.get('/disease', async(_, res) => {
 });
 
 router.get('/unit', async(_, res) => {
-    const unit = await controllerUnit.listDisease()
+    const unit = await controllerUnit.listUnit()
     res.send(unit);
 });
 
 router.get('/usermanual', async(_, res) => {
     const usermanual = await controllerUsermanual.listUsermanual()
     res.send(usermanual);
+});
+router.get('/reportMedicine/:month', async(req, res) => {
+    const month = req.params
+    const report = await controllerCheckup.medicineReport(month)
+    res.send(report)
+});
+router.get('/reportRevenue/:month', async(req, res) => {
+    const month = req.params
+    const report = await controllerCheckup.saleReport(month)
+    res.send(report)
 });
 
 module.exports = router;

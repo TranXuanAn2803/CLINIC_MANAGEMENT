@@ -1,11 +1,15 @@
 const { models } = require('../../config/DBconnect');
 const { Op } = require('sequelize');
 
-const listPatient = () => models.patient.findAll({ order: [
-        ['id', 'ASC']
-    ] });
+const listPatient = () => models.patient.findAll({
+    where: { isDeleted: false },
 
-const findPatient = (startdate, enddate) =>
+    order: [
+        ['id', 'ASC']
+    ]
+});
+
+const findPatient = (month, year) =>
     models.patient.findAll({
         order: [
             ['id', 'ASC']
@@ -14,8 +18,12 @@ const findPatient = (startdate, enddate) =>
             model: models.checkup,
             required: true,
             as: 'checkups',
-            where: { date: {
-                    [Op.gte]: startdate, [Op.lte]: enddate } }
+            where: {
+                [Op.and]: [
+                    sequelize.fn('EXTRACT(MONTH from "date") =', month),
+                    sequelize.fn('EXTRACT(YEAR from "date") =', year)
+                ],
+            }
         }],
         raw: true,
         nest: true
@@ -29,7 +37,7 @@ const updatePatient = async({ id, name, gender, yearOfBirth, address }) => {
     await models.patient.update({ name, gender, yearOfBirth, address }, { where: { id } });
 };
 
-const deletePatient = async(id) => { await models.patient.destroy({ where: { id } }); };
+const deletePatient = async id => { await models.patient.update({ isDeleted: true }, { where: { id } }); };
 
 module.exports = {
     listPatient,

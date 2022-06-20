@@ -220,9 +220,8 @@ const exportBill = async(req, res) => {
     console.log(p);
     return true;
 };
-const saleReport = async(req, res) => {
-    const body = req.body
-    const date = moment(body.date, 'YYYY-MM');
+const saleReport = async(m) => {
+    const date = moment(m.month, 'YYYY-MM');
     const month = parseInt(date.format('MM'));
     const year = parseInt(date.format('YYYY'));
     const report = await apiCheckup.saleReport(month, year);
@@ -233,21 +232,22 @@ const saleReport = async(req, res) => {
     for (const r of report) {
         r.percentage = r.sumOfFee / sum;
     }
-    res.send(report)
+    return report
+
 
 };
-const medicineReport = async(req, res) => {
-    const date = moment("2022-1", "YYYY-MM");
+const medicineReport = async(m) => {
+    const date = moment(m.month, 'YYYY-MM');
     var month = parseInt(date.format('MM'));
     var year = parseInt(date.format('YYYY'));
 
-    const p = await apiCheckup.medicineReport(month, year);
-    console.log(p);
-    return true;
+    const report = await apiCheckup.medicineReport(month, year);
+    return report;
 }
 const getConst = async(req, res) => {
     const username = await apiConstraint.username;
     const password = await apiConstraint.password;
+
     const examinationFee = await apiConstraint.examinationFee;
     const maxPatient = await apiConstraint.maxPatient;
     console.log(username.username, password.password, examinationFee.examinationFee, maxPatient.maxPatient);

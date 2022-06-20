@@ -34,7 +34,9 @@
   const formModal = $("#modify-modal");
   const descriptionModifyModalInput = $("#modify-modal-description");
 
-  const onCreateButtonClicked = () => { formModal.classList.add("is-active"); }
+  const onCreateButtonClicked = () => { 
+      formModal.classList.add("is-active"); 
+  }
   const onConfirmModalConfirmButtonClicked =(table)=>
   {
     fetch('/unit/delete', {
@@ -60,7 +62,10 @@
     descriptionModifyModalInput.value = row.type;
   };
 
-  $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active"); };
+  $("#modify-modal-close").onclick = function () { 
+    formModal.classList.remove("is-active"); 
+    descriptionModifyModalInput.classList.remove("is-danger");
+};
   $("#modify-modal-confirm").onclick = function (e) {
     e.preventDefault();
 
@@ -69,6 +74,11 @@
     if (type.length === 0) {
       descriptionModifyModalInput.classList.add("is-danger");
       return;
+    }
+    else
+    {
+            descriptionModifyModalInput.classList.remove("is-danger");
+
     }
     const unit={
       type:type,
@@ -91,8 +101,9 @@
           .catch((error) => {
           console.error('Error:', error);
         });
-        formModal.reset()
         table.setData(DATA_URL);
+        formModal.reset()
+
     } else {
       unit.id=table.getSelectedData()[0].id
       table.updateData([{ id: table.getSelectedData()[0].id, type }]);

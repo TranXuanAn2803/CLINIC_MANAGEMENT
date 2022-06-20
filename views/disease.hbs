@@ -6,7 +6,7 @@
 
   <div class="modal-content box">
     <div class="field">
-      <label class="label">Triệu chứng</label>
+      <label class="label">Tên Bệnh</label>
       <div class="control">
         <input id="modify-modal-description" name="description" class="input" type="text" required>
       </div>
@@ -61,7 +61,9 @@
     descriptionModifyModalInput.value = row.description;
   };
 
-  $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active"); };
+  $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active"); 
+              descriptionModifyModalInput.classList.remove("is-danger");
+};
   $("#modify-modal-confirm").onclick = function (e) {
     e.preventDefault();
 
@@ -70,6 +72,11 @@
     if (description.length === 0) {
       descriptionModifyModalInput.classList.add("is-danger");
       return;
+    }
+    else
+    {
+            descriptionModifyModalInput.classList.remove("is-danger");
+
     }
     const disease={
       description: description,

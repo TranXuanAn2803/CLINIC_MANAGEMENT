@@ -2,16 +2,22 @@
   <form class="box" action="/user/login" method="post">
     <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
     <div class="field">
+        {{#if message}}
+            <div style="color:red; font-size: 80%;">
+              <div>{{message}}</div>
+            </div>
+        {{/if}}
+
       <label class="label">Tài khoản</label>
       <div class="control">
-        <input class="input" type="text" name="username">
+        <input class="input" type="text" name="username" required>
       </div>
     </div>
 
     <div class="field">
       <label class="label">Mật Khẩu</label>
       <div class="control">
-        <input class="input" type="password" name="password">
+        <input class="input" type="password" name="password" required>
       </div>
     </div>
 

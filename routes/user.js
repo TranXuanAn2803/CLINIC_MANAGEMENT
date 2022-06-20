@@ -3,10 +3,11 @@ const controller = require('../controllers/user');
 const passport = require('../config/passport');
 
 router.get('/login', controller.view);
+router.get('/login/fail', controller.failView);
 
 router.post('/login', passport.authenticate("local", {
         failureFlash: true,
-        failureRedirect: '/user/login'
+        failureRedirect: '/user/login/fail'
 
     }),
     function(req, res) {

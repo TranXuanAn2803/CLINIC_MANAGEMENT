@@ -62,7 +62,9 @@
     descriptionModifyModalInput.value = row.description;
   };
 
-  $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active"); };
+  $("#modify-modal-close").onclick = function () { formModal.classList.remove("is-active"); 
+        descriptionModifyModalInput.classList.remove("is-danger");
+};
   $("#modify-modal-confirm").onclick = function (e) {
     e.preventDefault();
 
@@ -71,6 +73,11 @@
     if (description.length === 0) {
       descriptionModifyModalInput.classList.add("is-danger");
       return;
+    }
+    else
+    {
+      descriptionModifyModalInput.classList.remove("is-danger");
+
     }
     const userManual= {
       description: description

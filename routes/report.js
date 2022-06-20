@@ -2,9 +2,9 @@ const router = require('express').Router();
 const controller = require('../controllers/report');
 const controllerCheckup = require('../controllers/checkup');
 
-router.get('/', (req, res) => {
+router.get('/revenue', (req, res) => {
     if (req.session.user != undefined) {
-        controller.view(req, res)
+        controller.viewRevenue(req, res)
 
     } else {
         res.redirect('/user/login')
@@ -13,13 +13,14 @@ router.get('/', (req, res) => {
 });
 router.post('/revenue', controllerCheckup.saleReport);
 
-router.get('/', (res, req) => {
-    if (req.session.user) {
-        controller.view(req, res)
+router.get('/medicine', (req, res) => {
+    if (req.session.user != undefined) {
+        controller.viewMedicine(req, res)
 
     } else {
         res.redirect('/user/login')
     }
+
 
 });
 router.post('/medicine', controllerCheckup.medicineReport);

@@ -5,7 +5,6 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.TEXT,
             allowNull: false,
             primaryKey: true
-
         },
         password: {
             type: DataTypes.TEXT,
@@ -23,6 +22,13 @@ module.exports = function(sequelize, DataTypes) {
         sequelize,
         tableName: 'constraint',
         schema: 'public',
-        timestamps: false
+        timestamps: false,
+        indexes: [{
+            name: "constraint_pkey",
+            unique: true,
+            fields: [
+                { name: "username" },
+            ]
+        }, ]
     });
 };
