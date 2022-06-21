@@ -67,39 +67,39 @@
 
 
   const onCreateButtonClicked = () => { formModal.classList.add("is-active"); }
-  const onConfirmModalConfirmButtonClicked =(table)=>
-  { 
+  const onConfirmModalConfirmButtonClicked = (table) => {
     fetch('/patient/delete', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(table.getSelectedData()),
-          })
-          .then(response => {
-            response.json()
-          })
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch((error) => {
-          console.error('Error:', error);
-        });
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(table.getSelectedData()),
+    })
+      .then(response => {
+        response.json()
+      })
+      .then(data => {
+        console.log('Success:', data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
     table.deleteRow(
       table.getSelectedData().map(function (r) { return r.id; })
     );
-    
+
   }
   const onModifyButtonClicked = row => {
     nameModifyModalInput.value = row.name;
     yearOfBirthModifyModalInput.value = row.yearOfBirth;
+    genderModifyModalInput.value = row.gender;
     addressModifyModalInput.value = row.address;
   };
 
-  $("#modify-modal-close").onclick = function () { 
+  $("#modify-modal-close").onclick = function () {
     nameModifyModalInput.classList.remove("is-danger");
     addressModifyModalInput.classList.remove("is-danger");
-    formModal.classList.remove("is-active"); 
+    formModal.classList.remove("is-active");
   };
   $("#modify-modal-confirm").onclick = function (e) {
 
@@ -108,19 +108,18 @@
     const yearOfBirth = yearOfBirthModifyModalInput.value;
     const address = addressModifyModalInput.value;
     const hasError = false;
-      const patient={
-        name: name,
-        gender: gender,
-        yearOfBirth: yearOfBirth,
-        address: address,
-      }
+    const patient = {
+      name: name,
+      gender: gender,
+      yearOfBirth: yearOfBirth,
+      address: address,
+    }
 
     if (name.length === 0) {
       nameModifyModalInput.classList.add("is-danger");
       hasError = true;
     }
-    else
-    {
+    else {
       nameModifyModalInput.classList.remove("is-danger");
 
     }
@@ -128,12 +127,11 @@
       addressModifyModalInput.classList.add("is-danger");
       hasError = true;
     }
-    else
-    {
+    else {
       addressModifyModalInput.classList.remove("is-danger");
 
     }
-    
+
     if (hasError) {
       return;
     }
@@ -141,34 +139,12 @@
     if (isCreate) {
       table.addData([{ id: Math.round(Math.random() * 10000), name, gender, yearOfBirth, address }], true);
       fetch('/patient/add', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(patient),
-          })
-          .then(response => {
-            response.json()
-          })
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch((error) => {
-          console.error('Error:', error);
-        });
-        table.setData(DATA_URL);
-    } else {
-      table.updateData([{ id: table.getSelectedData()[0].id, name, gender, yearOfBirth, address }]);
-      patient.id=table.getSelectedData()[0].id
-      fetch('/patient/edit/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        
         body: JSON.stringify(patient),
-
-        })
+      })
         .then(response => {
           response.json()
         })
@@ -176,8 +152,30 @@
           console.log('Success:', data);
         })
         .catch((error) => {
-        console.error('Error:', error);
-      });
+          console.error('Error:', error);
+        });
+      table.setData(DATA_URL);
+    } else {
+      table.updateData([{ id: table.getSelectedData()[0].id, name, gender, yearOfBirth, address }]);
+      patient.id = table.getSelectedData()[0].id
+      fetch('/patient/edit/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+
+        body: JSON.stringify(patient),
+
+      })
+        .then(response => {
+          response.json()
+        })
+        .then(data => {
+          console.log('Success:', data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
     }
 
     formModal.classList.remove("is-active");
