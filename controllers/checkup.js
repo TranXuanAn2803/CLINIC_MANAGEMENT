@@ -337,6 +337,7 @@ const exportBill = async (req, res) => {
     res.render('checkup-bill', { title: 'Hoá đơn', b });
 
 };
+
 const saleReport = async (m) => {
     const date = moment(m.month, 'YYYY-MM');
     const month = parseInt(date.format('MM'));
@@ -344,8 +345,11 @@ const saleReport = async (m) => {
     const report = await apiCheckup.saleReport(month, year);
     var sum = 0;
     for (const r of report) {
-        sum = sum + r.sumOfFee;
+        if (r.sumOfFee === null || r.sumOfFee === undefined || r.sumOfFee === NaN) continue
+        sum = sum + parseInt(r.sumOfFee);
     }
+    console.log(sum)
+
     for (const r of report) {
         r.percentage = r.sumOfFee / sum;
     }
@@ -353,6 +357,7 @@ const saleReport = async (m) => {
 
 
 };
+
 const medicineReport = async (m) => {
     const date = moment(m.month, 'YYYY-MM');
     var month = parseInt(date.format('MM'));
