@@ -5,12 +5,12 @@ const apiDisease = require('../models/api/disease');
 const apiPatient = require('../models/api/patient');
 const moment = require('moment');
 
-const view = async(_, res) => {
+const view = async (_, res) => {
     const patients = await apiPatient.listPatient();
     res.render('checkup', { title: 'Phiếu khám', patients });
 };
 
-const viewEditCheckup = async(req, res) => {
+const viewEditCheckup = async (req, res) => {
     const id = req.params.id;
     const checkup = (await apiCheckup.findCheckUp(id))[0];
     const medicines = await apiMedicine.listMedicine();
@@ -18,14 +18,14 @@ const viewEditCheckup = async(req, res) => {
     res.render('checkup-edit', { title: 'Sửa phiếu khám', checkup, medicines, diseases });
 };
 
-const viewBill = async(req, res) => {
+const viewBill = async (req, res) => {
     const id = req.params.id;
     const checkup = (await apiCheckup.findCheckUp(id))[0];
     const { examinationFee } = await apiConstraint.examinationFee;
     const medicineFee = 1000;
     res.render('checkup-bill', { title: 'Hoá đơn', checkup, examinationFee, medicineFee });
 };
-const viewMedicine = async(id) => {
+const viewMedicine = async (id) => {
     const medicine = await apiCheckup.findMedicine(id.id);
     for (const m of medicine) {
         m.medicine_medicine = m.medicine_medicine.name;
@@ -33,7 +33,7 @@ const viewMedicine = async(id) => {
 
     return medicine;
 };
-const viewDisease = async(id) => {
+const viewDisease = async (id) => {
     const disease = await apiCheckup.findDisease(id.id);
     for (const d of disease) {
         d.iddisease_disease = d.iddisease_disease.description;
@@ -42,7 +42,7 @@ const viewDisease = async(id) => {
     return disease;
 };
 
-const viewlist = async(req, res) => {
+const viewlist = async (req, res) => {
     const checkup = await apiCheckup.listCheckUp2();
     for (const c of checkup) {
         let stringDisease = '';
@@ -62,7 +62,7 @@ const viewlist = async(req, res) => {
     }
     return checkup;
 };
-const viewlistOfMonth = async(m) => {
+const viewlistOfMonth = async (m) => {
     const date = moment(m.month, 'YYYY-MM');
     const month = parseInt(date.format('MM'));
     const year = parseInt(date.format('YYYY'));
@@ -87,13 +87,13 @@ const viewlistOfMonth = async(m) => {
     return checkup;
 };
 
-const viewListPatientOfDate = async(req, res) => {
+const viewListPatientOfDate = async (req, res) => {
     const date = moment('2022-1-17', 'YYYY-MM-DD');
     const p = await apiCheckup.listPatientOfDate(date);
     console.log(p);
 };
 
-const viewCheckUp = async(req, res) => {
+const viewCheckUp = async (req, res) => {
     const id = 11;
     const checkup = await apiCheckup.findCheckUp(id);
     let stringDisease = '';
@@ -108,7 +108,7 @@ const viewCheckUp = async(req, res) => {
     console.log(checkup, medicine);
 };
 
-const addCheckup = async(req, res) => {
+const addCheckup = async (req, res) => {
     const checkup = req.body;
     let maxPatient = await apiConstraint.maxPatient;
     maxPatient = parseInt(maxPatient.maxPatient);
@@ -127,7 +127,7 @@ const addCheckup = async(req, res) => {
     }
     console.log("hdhdhdh")
 };
-const addDisease = async(req, res) => {
+const addDisease = async (req, res) => {
     const checkupDisease = req.body;
     var disease = await apiCheckup.findDisease2(checkupDisease.idcheckup, checkupDisease.iddisease)
     if (disease === null || disease === undefined || disease.length === 0) {
@@ -141,7 +141,7 @@ const addDisease = async(req, res) => {
     }
 
 };
-const editDisease = async(req, res) => {
+const editDisease = async (req, res) => {
     const checkupDisease = req.body;
     var disease = await apiCheckup.findDisease2(checkupDisease.idcheckup, checkupDisease.iddisease)
     disease = disease[0]
@@ -165,7 +165,7 @@ const editDisease = async(req, res) => {
     }
 
 };
-const deleteDisease = async(req, res) => {
+const deleteDisease = async (req, res) => {
     const disease = req.body;
     for (const d of disease) {
         try {
@@ -176,7 +176,7 @@ const deleteDisease = async(req, res) => {
     }
 };
 
-const addMedicine = async(req, res) => {
+const addMedicine = async (req, res) => {
     const checkupMedicine = req.body;
     var medicine = await apiCheckup.findMedicine2(checkupMedicine.checkup, checkupMedicine.medicine)
     if (medicine === null || medicine === undefined || medicine.length === 0) {
@@ -199,7 +199,7 @@ const addMedicine = async(req, res) => {
         }
     }
 }
-const editMedicine = async(req, res) => {
+const editMedicine = async (req, res) => {
     const checkupMedicine = req.body;
     var medicine = await apiCheckup.findMedicine2(checkupMedicine.checkup, checkupMedicine.medicine)
     medicine = medicine[0]
@@ -233,7 +233,7 @@ const editMedicine = async(req, res) => {
 
     }
 };
-const deleteMedicine = async(req, res) => {
+const deleteMedicine = async (req, res) => {
     console.log(req.body)
     const medicine = req.body;
     for (const m of medicine) {
@@ -244,7 +244,7 @@ const deleteMedicine = async(req, res) => {
         }
     }
 };
-const editCheckup = async(req, res) => {
+const editCheckup = async (req, res) => {
     const checkup = {
         id: 1,
         patient: 2,
@@ -262,7 +262,7 @@ const editCheckup = async(req, res) => {
     return true;
 };
 
-const deleteCheckUp = async(req, res) => {
+const deleteCheckUp = async (req, res) => {
     const checkup = req.body;
     for (const c of checkup) {
         try {
@@ -283,7 +283,7 @@ const deleteCheckUp = async(req, res) => {
     }
 };
 
-const exportBill = async(req, res) => {
+const exportBill = async (req, res) => {
     const id = req.params;
     console.log(id.id)
     let medicinefee = 0;
@@ -337,7 +337,7 @@ const exportBill = async(req, res) => {
     res.render('checkup-bill', { title: 'Hoá đơn', b });
 
 };
-const saleReport = async(m) => {
+const saleReport = async (m) => {
     const date = moment(m.month, 'YYYY-MM');
     const month = parseInt(date.format('MM'));
     const year = parseInt(date.format('YYYY'));
@@ -353,7 +353,7 @@ const saleReport = async(m) => {
 
 
 };
-const medicineReport = async(m) => {
+const medicineReport = async (m) => {
     const date = moment(m.month, 'YYYY-MM');
     var month = parseInt(date.format('MM'));
     var year = parseInt(date.format('YYYY'));
@@ -361,7 +361,7 @@ const medicineReport = async(m) => {
     const report = await apiCheckup.medicineReport(month, year);
     return report;
 }
-const getConst = async(req, res) => {
+const getConst = async (req, res) => {
     const username = await apiConstraint.username;
     const password = await apiConstraint.password;
     const examinationFee = await apiConstraint.examinationFee;
