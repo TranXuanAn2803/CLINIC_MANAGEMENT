@@ -1,18 +1,16 @@
 <div id="table-inputs" class="m-2">
-  <div>
-    <button class="button" id="load-data-button">Tải dữ liệu</button>
-    <button class="button" id="select-all-button">Chọn tất cả</button>
-    <button class="button" id="deselect-all-button">Bỏ chọn tất cả</button>
-    <button class="button is-primary" id="create-button">Thêm</button>
-    <button class="button is-info" id="modify-button" disabled>Cập nhật</button>
-    <button class="button is-danger" id="delete-button">Xóa</button>
-    <input class="input is-primary" id="filter-input" type="text" placeholder="Nhập tên cần lọc" style="width: 500px;">
-  </div>
-  <div>
-    <label class="button" style="border: none; display: none;" id="label-month">Tháng</label>
-    <input class="input is-primary" style="width: 200px; display: none;" id="input-month" type="month"
-      name="bday-month">
-  </div>
+
+  <button class="button" id="load-data-button">Tải dữ liệu</button>
+  <button class="button" id="select-all-button">Chọn tất cả</button>
+  <button class="button" id="deselect-all-button">Bỏ chọn tất cả</button>
+  <button class="button is-primary" id="create-button">Thêm</button>
+  <button class="button is-info" id="modify-button" disabled>Cập nhật</button>
+  <button class="button is-danger" id="delete-button">Xóa</button>
+  <input class="input is-primary" id="filter-input" type="text" placeholder="Nhập tên cần lọc" style="width: 500px;">
+
+  <label class="button" style="border: none; display: none;" id="label-month">Tháng</label>
+  <input class="input is-primary" style="width: 200px; display: none;" id="input-month" type="month" name="bday-month">
+
 
 </div>
 <div id="table" onchange="load()"></div>
