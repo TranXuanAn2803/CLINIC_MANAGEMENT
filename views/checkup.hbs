@@ -178,5 +178,8 @@
     const row = table.getSelectedData()[0];
     onModifyButtonClicked(row);
   };
+  $("#filter-input").onchange = function (e) {
+    table.setFilter("patient_patient", "like", e.target.value);
+  };
 
 </script>

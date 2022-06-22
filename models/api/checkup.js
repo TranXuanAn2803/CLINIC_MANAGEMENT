@@ -250,8 +250,8 @@ const medicineReport = (month, year) => {
         attributes: [
             [sequelize.fn('DISTINCT', sequelize.col('"medicine"."id"')), 'id'],
 
-            'name', [sequelize.literal('COUNT("checkup_checkups")'), 'countOfCheckup'],
-            'unit_unit.type', [sequelize.literal('SUM("checkup-medicines"."number")'), 'sumofNumber']
+            'name', [sequelize.literal('COUNT(DISTINCT("checkup_checkups"))'), 'countOfCheckup'],
+            'unit_unit.type', [sequelize.literal('SUM(DISTINCT("checkup-medicines"."number"))'), 'sumofNumber']
         ],
 
         order: [

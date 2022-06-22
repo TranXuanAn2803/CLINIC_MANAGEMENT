@@ -340,4 +340,12 @@
     onConfirmModalConfirmButtonClicked(currentTable);
     currentTable.deselectRow();
   }
+
+
+  medicineTable.on("tableBuilt", () => {
+    medicineTable.setData(CHECKUP_MEDICINE_URL);
+  })
+  diseaseTable.on("tableBuilt", () => {
+    medicineTable.setData(CHECKUP_DISEASE_URL);
+  })
 </script>

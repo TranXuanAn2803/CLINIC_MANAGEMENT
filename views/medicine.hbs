@@ -17,7 +17,7 @@
         <div class="select">
           <select id="modify-modal-unit" name="unit" required>
             {{#each units}}
-              <option value={{this.id}}>{{this.type}}</option>
+            <option value={{this.id}}>{{this.type}}</option>
             {{/each}}
           </select>
         </div>
@@ -37,7 +37,7 @@
         <div class="select">
           <select id="modify-modal-user-manual" name="unit" required>
             {{#each userManuals}}
-              <option value={{this.id}}>{{this.description}}</option>
+            <option value={{this.id}}>{{this.description}}</option>
             {{/each}}
           </select>
         </div>
@@ -76,39 +76,40 @@
   const DATA_URL = "/api/fake/medicine";
 
   const formModal = $("#modify-modal");
+
   const nameModifyModalInput = $("#modify-modal-name");
   const unitModifyModalInput = $("#modify-modal-unit");
   const priceModifyModalInput = $("#modify-modal-price");
   const userManualModifyModalInput = $("#modify-modal-user-manual");
 
   const onCreateButtonClicked = () => { formModal.classList.add("is-active"); }
-  const onConfirmModalConfirmButtonClicked =(table)=>
-  { 
+  const onConfirmModalConfirmButtonClicked = (table) => {
     fetch('/medicine/delete', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          
-          body: JSON.stringify(table.getSelectedData()),
-          })
-          .then(response => {
-            response.json()
-          })
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch((error) => {
-          console.error('Error:', error);
-        });
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+
+      body: JSON.stringify(table.getSelectedData()),
+    })
+      .then(response => {
+        response.json()
+      })
+      .then(data => {
+        console.log('Success:', data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
 
     table.deleteRow(
-      table.getSelectedData().map(function (r) { 
-        return r.id; })
+      table.getSelectedData().map(function (r) {
+        return r.id;
+      })
     );
 
-  } 
-   const onModifyButtonClicked = row => {
+  }
+  const onModifyButtonClicked = row => {
     nameModifyModalInput.value = row.name;
     unitModifyModalInput.value = row.unit;
     priceModifyModalInput.value = row.price;
@@ -116,13 +117,13 @@
 
   };
 
-  $("#modify-modal-close").onclick = function () { 
-    formModal.classList.remove("is-active"); 
+  $("#modify-modal-close").onclick = function () {
+    formModal.classList.remove("is-active");
     nameModifyModalInput.classList.remove("is-danger");
     priceModifyModalInput.classList.remove("is-danger");
     unitModifyModalInput.classList.remove("is-danger");
     userManualModifyModalInput.classList.remove("is-danger");
-    };
+  };
 
   $("#modify-modal-confirm").onclick = function (e) {
     e.preventDefault();
@@ -133,48 +134,45 @@
     const userManual = userManualModifyModalInput.value;
     let hasError = false;
 
-    const obj = { 
-      name, unit:unitModifyModalInput.text, price, userManual: userManualModifyModalInput.text};
+    const obj = {
+      name, unit: unitModifyModalInput.text, price, userManual: userManualModifyModalInput.text
+    };
 
     if (name.length === 0) {
       nameModifyModalInput.classList.add("is-danger");
       hasError = true;
     }
-    else
-    {
+    else {
       nameModifyModalInput.classList.remove("is-danger");
     }
     if (price < 0) {
       priceModifyModalInput.classList.add("is-danger");
       hasError = true;
     }
-    else
-    {
+    else {
       priceModifyModalInput.classList.remove("is-danger");
     }
     if (unit.length === 0) {
       unitModifyModalInput.parentElement.classList.add("is-danger");
       hasError = true;
     }
-    else
-    {
+    else {
       unitModifyModalInput.parentElement.classList.remove("is-danger");
     }
     if (userManual.length === 0) {
       userManualModifyModalInput.parentElement.classList.add("is-danger");
       hasError = true;
     }
-    else
-    {
+    else {
       userManualModifyModalInput.parentElement.classList.remove("is-danger");
     }
 
     if (hasError) {
       return;
-    
+
     }
 
-    const medicine={
+    const medicine = {
       name: name,
       unit: unit,
       price: price,
@@ -183,41 +181,41 @@
     if (isCreate) {
       table.addData([{ id: Math.round(Math.random() * 10000), ...obj }], true);
       fetch('/medicine/add', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(medicine),
-          })
-          .then(response => {
-            response.json()
-          })
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch((error) => {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(medicine),
+      })
+        .then(response => {
+          response.json()
+        })
+        .then(data => {
+          console.log('Success:', data);
+        })
+        .catch((error) => {
           console.error('Error:', error);
         });
-        table.setData(DATA_URL);
-        formModal.reset()
-        
+      table.setData(DATA_URL);
+      formModal.reset()
+
     } else {
-      medicine.id=table.getSelectedData()[0].id
+      medicine.id = table.getSelectedData()[0].id
       table.updateData([{ id: table.getSelectedData()[0].id, ...obj }]);
       fetch('/medicine/edit', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(medicine),
-          })
-          .then(response => {
-            response.json()
-          })
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch((error) => {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(medicine),
+      })
+        .then(response => {
+          response.json()
+        })
+        .then(data => {
+          console.log('Success:', data);
+        })
+        .catch((error) => {
           console.error('Error:', error);
         });
       table.setData(DATA_URL);
@@ -226,7 +224,7 @@
 
     formModal.classList.remove("is-active");
     table.deselectRow();
-    
+
   };
 </script>
 
