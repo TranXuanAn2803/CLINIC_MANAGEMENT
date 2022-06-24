@@ -1,7 +1,6 @@
 <div class="m-2">
-  <label for="bday-month">Tháng</label>
-  <input id="bday-month" type="month" name="bday-month">
-
+  <label class="button" style="border: none;">Tháng</label>
+  <input class="input is-primary" style="width: 200px;" id="bday-month" type="month" name="bday-month">
 </div>
 <div id="table"></div>
 
@@ -22,16 +21,11 @@
     placeholder: "Không có dữ liệu",
     columns: TABLE_COLUMNS,
   });
-  $("#bday-month").onchange = function () {
-    const date = { date: this.value };
-    fetch('/report/revenue', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', },
-      body: JSON.stringify(date),
-    })
-      .then(response => { table.setData(response.json()); })
-      .then(data => { console.log('Success:', data); })
-      .catch((error) => { console.error('Error:', error); });
-  }
+const DATA_URL = "/api/fake/reportRevenue/";
+
+$("#bday-month").onchange= function() {
+    table.setData(DATA_URL+this.value)
+}
+
 
 </script>
