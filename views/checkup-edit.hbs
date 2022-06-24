@@ -130,17 +130,12 @@
       { title: "Bệnh", field: "iddisease_disease", sorter: "string" },
     ],
   });
-<<<<<<< HEAD
-
-=======
->>>>>>> edit-frontend
   let currentTable = medicineTable;
   const checkupid = {{ checkup.id }}
   const CHECKUP_MEDICINE_URL = "/api/fake/checkupMedicine/" + {{ checkup.id }};
   const CHECKUP_DISEASE_URL = "/api/fake/checkupDisease/" + {{ checkup.id }};
   let oldmedicine = 0;
   let olddisease = 0;
-
   const medicineModifyModal = $("#medicine-modify-modal");
   const diseaseModifyModal = $("#disease-modify-modal");
   const buttonsStatusChanger = function (data, rows) {
@@ -158,10 +153,6 @@
     currentTable = medicineTable;
     medicineTable.deselectRow();
   });
-<<<<<<< HEAD
-
-=======
->>>>>>> edit-frontend
   diseaseTable.on("rowSelectionChanged", (data, rows) => {
     if (currentTable !== diseaseTable) {
       currentTable = diseaseTable;
@@ -173,10 +164,6 @@
     currentTable = diseaseTable;
     diseaseTable.deselectRow();
   });
-<<<<<<< HEAD
-
-=======
->>>>>>> edit-frontend
   $("#load-data-button").onclick = function () {
     if (currentTable === medicineTable) {
       medicineTable.setData(CHECKUP_MEDICINE_URL);
@@ -213,7 +200,6 @@
     medicineModifyModal.classList.remove("is-active");
     medicineModifyModal.classList.remove("is-danger");
   }
-
   $("#medicine-modify-modal-confirm").onclick = function () {
     const medicine = $("#medicine-modify-modal-medicine").value;
     const number = parseInt($("#medicine-modify-modal-number").value) || -1;
@@ -224,7 +210,6 @@
     }
     else {
       medicineModifyModal.classList.remove("is-danger");
-
     }
     const checkupMedicine = {
       checkup: checkupid,
@@ -243,8 +228,6 @@
         .then(response => { response.json(); })
         .then(data => { console.log('Success:', data); })
         .catch((error) => { console.error('Error:', error); });
-
-
     } else {
       checkupMedicine.oldmedicine = oldmedicine
       fetch('/checkup/checkupMedicine/edit', {
@@ -255,12 +238,10 @@
         .then(response => { response.json(); })
         .then(data => { console.log('Success:', data); })
         .catch((error) => { console.error('Error:', error); });
-
     }
     setTimeout(function () {
       medicineTable.setData(CHECKUP_MEDICINE_URL);
     }, 5000);
-
     medicineModifyModal.reset()
     medicineModifyModal.classList.remove("is-active");
   }
@@ -277,9 +258,10 @@
     }
     else {
       diseaseModifyModal.classList.remove("is-danger");
-
-
-
+    }
+    if (hasError) {
+      return
+    }
     if (isCreate) {
       fetch('/checkup/checkupDisease/add', {
         method: 'POST',
@@ -289,7 +271,6 @@
         .then(response => { response.json(); })
         .then(data => { console.log('Success:', data); })
         .catch((error) => { console.error('Error:', error); });
-
     } else {
       checkupDisease.olddisease = olddisease
       console.log(olddisease)
@@ -301,7 +282,6 @@
         .then(response => { response.json(); })
         .then(data => { console.log('Success:', data); })
         .catch((error) => { console.error('Error:', error); });
-
     }
     diseaseModifyModal.classList.remove("is-active");
     setTimeout(function () {
@@ -323,9 +303,6 @@
       setTimeout(function () {
         diseaseTable.setData(CHECKUP_DISEASE_URL);
       }, 5000);
-
-
-
     } else {
       fetch('/checkup/checkupMedicine/delete', {
         method: 'POST',
@@ -340,7 +317,6 @@
       }, 5000);
     }
   }
-
   $("#disease-modify-modal-close").onclick = function () { diseaseModifyModal.classList.remove("is-active"); }
   $("#confirm-modal-close").onclick = function () { confirmFormModal.classList.remove("is-active") }
   $("#confirm-modal-confirm").onclick = function (e) {
@@ -349,8 +325,6 @@
     onConfirmModalConfirmButtonClicked(currentTable);
     currentTable.deselectRow();
   }
-
-
   medicineTable.on("tableBuilt", () => {
     medicineTable.setData(CHECKUP_MEDICINE_URL);
   })

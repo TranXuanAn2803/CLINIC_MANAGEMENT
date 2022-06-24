@@ -10,7 +10,7 @@ const sequelize = new Sequelize(
         logging: false,
         query: { raw: true },
         timezone: '+07:00',
-        dialectOptions: { ssl: { require: true, rejectUnauthorized: false, requestCert: false } }
+        dialectOptions: { ssl: { require: true, rejectUnauthorized: false, requestCert: false, } }
     }
 );
 
