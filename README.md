@@ -27,13 +27,13 @@ ngày, thay đổi tiền khám, thay đổi tên đăng nhập và mật khẩu
 7. Đăng nhập, đăng xuất.
 
 ## Technologies Used
-Hệ quản trị cơ sở dữ liệu: PostgreSQL.
-Công cụ phân tích thiết kế: StarUML, Visual Paradigm.
-Công cụ xây dựng ứng dụng: Visual Studio Code, phpPgAdmin.
-FrontEnd: Tabulator, Bulma CSS.
-Backend: NodeJS, ExpressJS, Sequelize.
-Version Control: Git.
-Công cụ quản lý source code: GitHub.
+- Hệ quản trị cơ sở dữ liệu: PostgreSQL.
+- Công cụ phân tích thiết kế: StarUML, Visual Paradigm.
+- Công cụ xây dựng ứng dụng: Visual Studio Code, phpPgAdmin.
+- FrontEnd: Tabulator, Bulma CSS.
+- Backend: NodeJS, ExpressJS, Sequelize.
+- Version Control: Git.
+- Công cụ quản lý source code: GitHub.
 Hosting:
 ● Website: Heroku
 ● Database: Heroku
