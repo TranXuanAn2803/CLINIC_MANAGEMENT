@@ -4,7 +4,7 @@
 * [General Info](#general-information)
 * [Technologies Used](#technologies-used)
 * [Video Demo](#video-demo)
-* [General Info](#general-information)
+* [Team Info](#team-information)
 * [Features](#features)
 * [Database Design](#database-design)
 * [Contact](#contact)
