@@ -51,7 +51,7 @@ Hosting:
 
 
 ## Features
-![image](https://github.com/TranXuanAn2803/CLINIC_MANAGEMENT/assets/87705737/00ed24a2-6eeb-4ab1-ae0d-b5a4faa5b16e)
+![image](https://github.com/TranXuanAn2803/CLINIC_MANAGEMENT/blob/main/use-case.png)
 | STT  | Chức năng |
 | ------------- | ------------- |
 | 1  | Login  |
@@ -70,7 +70,7 @@ Hosting:
 
 
 ## Database Design
-![image](https://github.com/TranXuanAn2803/CLINIC_MANAGEMENT/assets/87705737/d1b42d41-14f4-4c13-98d1-48668e19ef8c)
+![image](https://github.com/TranXuanAn2803/CLINIC_MANAGEMENT/blob/main/database-er.png)
 
 
 
